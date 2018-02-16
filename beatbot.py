@@ -30,7 +30,8 @@ def mpd():
     data = {
         'currentsong'  : current_song,
         'status'       : client.status(),
-        'playlistinfo' : client.playlistinfo(str(int(current_song['pos']) + 1)              + ":" + str(int(current_song['pos']) + 11))
+        'playlistinfo' : client.playlistinfo(str(int(current_song['pos']) + 1)
+            + ":" + str(int(current_song['pos']) + 11))
     }
 
     close_client(client)
