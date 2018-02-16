@@ -103,7 +103,9 @@
                         $('#play_progress').attr('style','width: ' +
                             progress_perc + '%');
                         $('#play_progress').attr('aria-valuenow', progress_perc);
-                        $('#play_clock').html(time_format(json.status.elapsed) + '&nbsp;/&nbsp;' + time_format(json.status.duration));
+                        $('#play_clock').html(time_format(json.status.elapsed) +
+                            '&nbsp;/&nbsp;' +
+                            time_format(json.status.duration));
 
                         $('tr:has(td)').remove();
                         $.each(json.playlistinfo, function (index, song) {
