@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="col-1" style="padding-top:10px;">
-                    <p id="play_clock">XX:XX / XX:XX</p>
+                    <p><span id="play_clock_elapsed"></span>&nbsp;/&nbsp;<span id="play_clock_duration"></span></p>
                 </div>
             </div>
         </div>
@@ -81,7 +81,18 @@
                 return minutes + ':' + seconds;
             }
 
-            $(function () {
+            function updateProgress(elapsed, duration) {
+                var progress_perc = Math.trunc((elapsed / duration) * 100);
+                $('#play_progress').attr('style','width: ' + progress_perc +
+                    '%');
+                $('#play_progress').attr('aria-valuenow', progress_perc);
+                $('#play_clock_elapsed').text(time_format(elapsed));
+                $('#play_clock_duration').text(time_format(duration));
+            }
+
+            function full_refresh() {
+                var elapsed, duration;
+
                 $.ajax({
                     url: 'mpd',
                     type: 'GET',
@@ -98,14 +109,9 @@
                         $('#np_album').text(json.currentsong.album + ' (' +
                             json.currentsong.date + ')');
 
-                        var progress_perc = Math.trunc((json.status.elapsed /
-                            json.status.duration) * 100);
-                        $('#play_progress').attr('style','width: ' +
-                            progress_perc + '%');
-                        $('#play_progress').attr('aria-valuenow', progress_perc);
-                        $('#play_clock').html(time_format(json.status.elapsed) +
-                            '&nbsp;/&nbsp;' +
-                            time_format(json.status.duration));
+                        elapsed = json.status.elapsed;
+                        duration = json.status.duration;
+                        updateProgress(elapsed, duration);
 
                         $('tr:has(td)').remove();
                         $.each(json.playlistinfo, function (index, song) {
@@ -116,10 +122,24 @@
                                 .append($('<td/>').text(time_format(song.time)))
                             );
                         });
+
+                        var x = setInterval(function() {
+                            elapsed++;
+                            updateProgress(elapsed, duration);
+
+                            if (elapsed >= duration) {
+                                clearInterval(x);
+                                full_refresh();
+                            }
+                        }, 1000);
                     },
                     error: function(xhr, status) {
                     }
                 });
+            }
+
+            $(function () {
+                full_refresh();
             });
         </script>
     </body>
