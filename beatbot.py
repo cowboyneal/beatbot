@@ -26,12 +26,17 @@ def mpd():
     client = get_client()
 
     current_song = client.currentsong()
+    status = client.status()
+
+    list_start = str(int(current_song['pos']) + 1)
+    list_end = str(min(int(current_song['pos']) + 11,
+            int(status['playlistlength'])))
 
     data = {
         'currentsong'  : current_song,
-        'status'       : client.status(),
-        'playlistinfo' : client.playlistinfo(str(int(current_song['pos']) + 1)
-            + ":" + str(int(current_song['pos']) + 11))
+        'status'       : status,
+        'playlistinfo' : client.playlistinfo(list_start + ":" + list_end),
+        'outputs'      : client.outputs()
     }
 
     close_client(client)
@@ -49,12 +54,17 @@ def album_art(song_id):
     try:
         image = song_file.tags['APIC:'].data
     except:
-        pass
-        # image_file = open('notfound.jpg', 'r+')
-        # image = image_file.read()
-        # image_file.close()
+        image_file = open('notfound.jpg', 'rb')
+        image = image_file.read()
+        image_file.close()
 
     image_type = imghdr.what('', image)
+
+    if not image_type:
+        image_file = open('notfound.jpg', 'rb')
+        image = image_file.read()
+        image_file.close()
+        image_type = imghdr.what('', image)
 
     return send_file(io.BytesIO(image),
             attachment_filename=str(song_id) + '.' + image_type,

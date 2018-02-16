@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>Beatbot</title>
     </head>
-    <body>
+    <body style="background-color:#fafafa;">
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -14,6 +14,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <nav class="navbar navbar-dark bg-dark">
             <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
+            <span class="navbar-text">Tune in at <a href="http://cowboyneal.caster.fm/">cowboyneal.caster.fm</a></span>
         </nav>
         <div class="container">
             <div class="row">
@@ -21,7 +22,7 @@
                     <h2 style="margin-top:.5rem;">Now Playing</h2>
                 </div>
             </div>
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-4">
                     <img id="np_thumb" class="img-thumbnail rounded" style="height:260px;width:260px;">
                 </div>
@@ -54,7 +55,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <table id="playlist" class="table">
+                    <table id="playlist" class="table table-sm table-striped table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">Name</th>
