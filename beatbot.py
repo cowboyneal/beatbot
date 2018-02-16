@@ -21,6 +21,17 @@ def close_client(client):
 def beatbot():
     return render_template('index.html')
 
+@app.route('/nowplaying.rss')
+def rss():
+    client = get_client()
+
+    current_song = client.currentsong()
+    now_playing = current_song['title'] + ' - ' + current_song['artist']
+
+    close_client(client)
+
+    return render_template('nowplaying.rss', now_playing=now_playing)
+
 @app.route('/mpd')
 def mpd():
     client = get_client()
