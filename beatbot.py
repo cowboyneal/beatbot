@@ -45,7 +45,15 @@ def album_art(song_id):
     close_client(client)
 
     song_file = File('/Users/pater/Music/Mixxx/' + file_name)
-    image = song_file.tags['APIC:'].data
+
+    try:
+        image = song_file.tags['APIC:'].data
+    except:
+        pass
+        # image_file = open('notfound.jpg', 'r+')
+        # image = image_file.read()
+        # image_file.close()
+
     image_type = imghdr.what('', image)
 
     return send_file(io.BytesIO(image),
