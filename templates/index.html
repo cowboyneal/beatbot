@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <title>Beatbot</title>
+    </head>
+    <body>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h2 style="margin-top:.5rem;">Now Playing</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <img id="np_thumb" class="img-thumbnail rounded" style="height:260px;width:260px;">
+                </div>
+                <div class="col-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 id="np_name" class="card-title">Song Name</h4>
+                            <h5 id="np_artist" class="card-subtitle mb-2 text-muted">Artist</h5>
+                            <p id="np_album" class="card-text">Album (Year)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11" style="padding-top:15px;">
+                    <div class="progress">
+                        <div id="play_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="col-1" style="padding-top:10px;">
+                    <p id="play_clock">XX:XX / XX:XX</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h2>Up Next</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table id="playlist" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Artist</th>
+                                <th scope="col">Album</th>
+                                <th scope-"col">Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            function time_format(time) {
+                var minutes = Math.trunc(time / 60);
+                var seconds = Math.trunc(time % 60);
+
+                if (seconds < 10) {
+                    seconds = '0' + seconds;
+                }
+
+                return minutes + ':' + seconds;
+            }
+
+            $(function () {
+                $.ajax({
+                    url: 'mpd',
+                    type: 'GET',
+                    dataType : 'json',
+                    success: function(json) {
+                        $(document).prop('title', 'Beatbot: ' +
+                            json.currentsong.title + ' - ' +
+                            json.currentsong.artist);
+
+                        $('#np_thumb').attr('src', 'album_art/' +
+                            json.currentsong.id);
+                        $('#np_name').text(json.currentsong.title);
+                        $('#np_artist').text(json.currentsong.artist);
+                        $('#np_album').text(json.currentsong.album + ' (' +
+                            json.currentsong.date + ')');
+
+                        var progress_perc = Math.trunc((json.status.elapsed /
+                            json.status.duration) * 100);
+                        $('#play_progress').attr('style','width: ' +
+                            progress_perc + '%');
+                        $('#play_progress').attr('aria-valuenow', progress_perc);
+                        $('#play_clock').html(time_format(json.status.elapsed) + '&nbsp;/&nbsp;' + time_format(json.status.duration));
+
+                        $('tr:has(td)').remove();
+                        $.each(json.playlistinfo, function (index, song) {
+                            $('#playlist').append($('<tr/>')
+                                .append($('<td/>').text(song.title))
+                                .append($('<td/>').text(song.artist))
+                                .append($('<td/>').text(song.album))
+                                .append($('<td/>').text(time_format(song.time)))
+                            );
+                        });
+                    },
+                    error: function(xhr, status) {
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
