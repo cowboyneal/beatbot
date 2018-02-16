@@ -43,6 +43,16 @@ def mpd():
 
     return jsonify(data)
 
+def get_placeholder_image():
+    image_file = open('notfound.jpg', 'rb')
+    image = image_file.read()
+    image_file.close()
+
+    return image
+
+def get_image_type(image):
+    return imghdr.what('', image)
+
 @app.route('/album_art/<int:song_id>')
 def album_art(song_id):
     client = get_client()
@@ -54,18 +64,14 @@ def album_art(song_id):
     try:
         image = song_file.tags['APIC:'].data
     except:
-        image_file = open('notfound.jpg', 'rb')
-        image = image_file.read()
-        image_file.close()
+        image = get_placeholder_image()
 
-    image_type = imghdr.what('', image)
+    image_type = get_image_type(image)
 
     if not image_type:
-        image_file = open('notfound.jpg', 'rb')
-        image = image_file.read()
-        image_file.close()
-        image_type = imghdr.what('', image)
+        image = get_placeholder_image()
+        image_type = get_image_type(image)
 
     return send_file(io.BytesIO(image),
-            attachment_filename=str(song_id) + '.' + image_type,
-            mimetype='image/' + image_type)
+        attachment_filename=str(song_id) + '.' + image_type,
+        mimetype='image/' + image_type)
