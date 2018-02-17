@@ -15,7 +15,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <nav class="navbar navbar-dark bg-dark">
             <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
-            <span class="navbar-text">Tune in at <i class="fas fa-podcast"></i> <a href="http://cowboyneal.caster.fm/">cowboyneal.caster.fm</a></span>
+            <span class="navbar-text">Tune in at <a href="http://cowboyneal.caster.fm/"><i class="fas fa-podcast"></i> cowboyneal.caster.fm</a></span>
             <span class="navbar-text"><a href="nowplaying.rss"><i class="fas fa-rss-square"></i></a></span>
         </nav>
         <div class="container">
@@ -26,7 +26,7 @@
             </div>
             <div class="row align-items-start">
                 <div class="col-4">
-                    <img id="np_thumb" class="img-thumbnail rounded" style="height:260px;width:260px;">
+                    <img id="np_thumb" class="img-thumbnail rounded">
                 </div>
                 <div class="col-8">
                     <div class="card">
@@ -43,19 +43,21 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" hidden><i class="far fa-star"></i> Request A Song</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal"><i class="far fa-star"></i> Request A Song</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-11" style="padding-top:15px;">
+                <div class="col-10" style="padding-top:15px;">
                     <div class="progress">
                         <div id="play_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
-                <div class="col-1" style="padding-top:10px;">
-                    <p><span id="play_clock_elapsed"></span>&nbsp;/&nbsp;<span id="play_clock_duration"></span></p>
+                <div class="col-2" style="padding-top:10px;">
+                    <div class="float-right">
+                        <p><span id="play_clock_elapsed"></span>&nbsp;/&nbsp;<span id="play_clock_duration"></span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,6 +81,15 @@
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">Thanks for listening!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,8 +117,8 @@
                                 <div class="col">
                                     <form>
                                         <div class="form-group">
-                                            <label for="formControlSelect1">Matches</label>
-                                            <select id="song_select" class="form-control" id="formControlSelect1" size="10">
+                                            <label for="song_select">Matches</label>
+                                            <select id="song_select" class="form-control" size="10" onchange="enableRequestSubmit();">
                                             </select>
                                         </div>
                                     </form>
@@ -116,8 +127,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                        <button type="button" class="btn btn-primary" disabled>Request Song</button>
+                        <button id="queue_button" type="button" class="btn btn-primary" onclick="submitRequest();" disabled>Request Song</button>
                     </div>
                 </div>
             </div>
@@ -143,13 +153,39 @@
                 $('#play_clock_duration').text(time_format(duration));
             }
 
+            function updateUpNext(playlistinfo) {
+                $('tr:has(td)').remove();
+                $.each(playlistinfo, function (index, song) {
+                    $('#playlist').append($('<tr/>')
+                        .append($('<td/>').text(song.title))
+                        .append($('<td/>').text(song.artist))
+                        .append($('<td/>').text(song.album))
+                        .append($('<td/>').text(time_format(song.time)))
+                    );
+                });
+            }
+
+            function getPlaylist() {
+                $.ajax({
+                    url: 'playlistinfo',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(json) {
+                        updateUpNext(json.playlistinfo);
+                    },
+                    error: function(xhr, status) {
+                    }
+                });
+            }
+
             function full_refresh() {
                 var elapsed, duration;
+                var timer = 0;
 
                 $.ajax({
                     url: 'mpd',
                     type: 'GET',
-                    dataType : 'json',
+                    dataType: 'json',
                     success: function(json) {
                         $(document).prop('title', 'Beatbot: ' +
                             json.currentsong.title + ' - ' +
@@ -166,19 +202,17 @@
                         duration = json.status.duration;
                         updateProgress(elapsed, duration);
 
-                        $('tr:has(td)').remove();
-                        $.each(json.playlistinfo, function (index, song) {
-                            $('#playlist').append($('<tr/>')
-                                .append($('<td/>').text(song.title))
-                                .append($('<td/>').text(song.artist))
-                                .append($('<td/>').text(song.album))
-                                .append($('<td/>').text(time_format(song.time)))
-                            );
-                        });
+                        updateUpNext(json.playlistinfo);
 
                         var x = setInterval(function() {
                             elapsed++;
+                            timer++;
                             updateProgress(elapsed, duration);
+
+                            if (timer >= 60) {
+                                getPlaylist();
+                                timer = 0;
+                            }
 
                             if (elapsed >= duration) {
                                 clearInterval(x);
@@ -196,8 +230,6 @@
             });
 
             function searchSongs() {
-                return;
-
                 var match = $('#search_term').val();
 
                 if (match.length === 0 || !match.trim()) {
@@ -212,8 +244,41 @@
                         $('option').remove();
 
                         $.each(json.results, function(index, song) {
-                            $('#song_select').append(new Option());
+                            $('#song_select').append(new Option(song.title + ' - ' + song.artist, song.id));
                         });
+                    },
+                    error: function(xhr, status) {
+                    }
+                });
+            }
+
+            function enableRequestSubmit() {
+                var selection = $('#song_select option:selected').text();
+
+                if (selection.match(/Chingy/)) {
+                    $('#queue_button').prop('disabled', true);
+                    $('#queue_button').html('No Chingy!');
+                    return;
+                }
+
+                $('#queue_button').html('Request Song');
+                $('#queue_button').prop('disabled', false);
+            }
+
+            function submitRequest() {
+                var song_id = $('#song_select').val();
+
+                $('#search_term').val('');
+                $('option').remove();
+                $('#queue_button').prop('disabled', true);
+                $('#searchModal').modal('hide');
+
+                $.ajax({
+                    url: 'queue_request/' + song_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(json) {
+                        updateUpNext(json.playlistinfo);
                     },
                     error: function(xhr, status) {
                     }

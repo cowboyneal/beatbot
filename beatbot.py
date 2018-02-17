@@ -5,6 +5,7 @@ from flask import Flask
 from flask import render_template, jsonify, send_file, make_response
 from musicpd import MPDClient
 from mutagen import File
+from PIL import Image
 from functools import wraps, update_wrapper
 from datetime import datetime
 app = Flask(__name__)
@@ -37,10 +38,7 @@ def rss():
 
     return render_template('nowplaying.rss', now_playing=now_playing)
 
-@app.route('/mpd')
-def mpd():
-    client = get_client()
-
+def get_plinfo(client):
     current_song = client.currentsong()
     status = client.status()
 
@@ -48,10 +46,19 @@ def mpd():
     list_end = str(min(int(current_song['pos']) + 11,
             int(status['playlistlength']) - 1))
 
+    return client.playlistinfo(list_start + ":" + list_end)
+
+@app.route('/mpd')
+def mpd():
+    client = get_client()
+
+    current_song = client.currentsong()
+    status = client.status()
+
     data = {
         'currentsong'  : current_song,
         'status'       : status,
-        'playlistinfo' : client.playlistinfo(list_start + ":" + list_end),
+        'playlistinfo' : get_plinfo(client),
         'outputs'      : client.outputs()
     }
 
@@ -91,25 +98,55 @@ def album_art(song_id):
     song_file = File(SONG_FILE_DIRECTORY + file_name)
 
     try:
-        image = song_file.tags['APIC:'].data
+        image_data = song_file.tags['APIC:'].data
     except:
-        image = get_placeholder_image()
+        image_data = get_placeholder_image()
 
-    image_type = get_image_type(image)
+    image_type = get_image_type(image_data)
 
     if not image_type:
-        image = get_placeholder_image()
-        image_type = get_image_type(image)
+        image_data = get_placeholder_image()
+        image_type = get_image_type(image_data)
 
-    return send_file(io.BytesIO(image),
+    image = Image.open(io.BytesIO(image_data))
+    image = image.resize((250, 250), Image.ANTIALIAS)
+    image_data = io.BytesIO()
+    image.save(image_data, format=image_type)
+    image_data = image_data.getvalue()
+
+    return send_file(io.BytesIO(image_data),
         attachment_filename=str(song_id) + '.' + image_type,
         mimetype='image/' + image_type)
 
 @app.route('/search/<string:match>')
 def search(match):
-    results = {}
-
     client = get_client()
+
+    results = client.playlistsearch('title', match)
+    results += client.playlistsearch('artist', match)
+
     close_client(client)
 
-    return jsonify(results)
+    data = { 'results' : results }
+    return jsonify(data)
+
+@app.route('/playlistinfo')
+def refresh_playlistinfo():
+    client = get_client()
+
+    data = { 'playlistinfo' : get_plinfo(client) }
+
+    close_client(client)
+    return jsonify(data)
+
+@app.route('/queue_request/<int:song_id>')
+def queue_request(song_id):
+    client = get_client()
+
+    next_pos = client.status()['nextsong']
+    client.moveid(song_id, next_pos)
+    next_pos = client.status()['nextsong']
+    client.moveid(song_id, next_pos)
+
+    close_client(client)
+    return refresh_playlistinfo()
