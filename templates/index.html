@@ -8,13 +8,15 @@
     </head>
     <body style="background-color:#fafafa;">
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="static/HackTimer.silent.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <nav class="navbar navbar-dark bg-dark">
             <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
-            <span class="navbar-text">Tune in at <a href="http://cowboyneal.caster.fm/">cowboyneal.caster.fm</a></span>
+            <span class="navbar-text">Tune in at <i class="fas fa-podcast"></i> <a href="http://cowboyneal.caster.fm/">cowboyneal.caster.fm</a></span>
+            <span class="navbar-text"><a href="nowplaying.rss"><i class="fas fa-rss-square"></i></a></span>
         </nav>
         <div class="container">
             <div class="row">
@@ -22,7 +24,7 @@
                     <h2 style="margin-top:.5rem;">Now Playing</h2>
                 </div>
             </div>
-            <div class="row align-items-center">
+            <div class="row align-items-start">
                 <div class="col-4">
                     <img id="np_thumb" class="img-thumbnail rounded" style="height:260px;width:260px;">
                 </div>
@@ -32,6 +34,16 @@
                             <h4 id="np_name" class="card-title">Song Name</h4>
                             <h5 id="np_artist" class="card-subtitle mb-2 text-muted">Artist</h5>
                             <p id="np_album" class="card-text">Album (Year)</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" hidden><i class="far fa-star"></i> Request A Song</button>
                         </div>
                     </div>
                 </div>
@@ -67,6 +79,46 @@
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalTitle">Request A Song</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="search_term" placeholder="Find a song" aria-label="Text to match" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="searchSongs()">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="formControlSelect1">Matches</label>
+                                            <select id="song_select" class="form-control" id="formControlSelect1" size="10">
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="button" class="btn btn-primary" disabled>Request Song</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,6 +194,31 @@
             $(function () {
                 full_refresh();
             });
+
+            function searchSongs() {
+                return;
+
+                var match = $('#search_term').val();
+
+                if (match.length === 0 || !match.trim()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: 'search/' + match,
+                    type: 'GET',
+                    dataTyoe: 'json',
+                    success: function(json) {
+                        $('option').remove();
+
+                        $.each(json.results, function(index, song) {
+                            $('#song_select').append(new Option());
+                        });
+                    },
+                    error: function(xhr, status) {
+                    }
+                });
+            }
         </script>
     </body>
 </html>
