@@ -254,13 +254,7 @@
             }
 
             function enableRequestSubmit() {
-                var selection = $('#song_select option:selected').text();
-
-                if (selection.match(/Chingy/)) {
-                    $('#queue_button').prop('disabled', true);
-                    $('#queue_button').html('No Chingy!');
-                    return;
-                }
+                // var selection = $('#song_select option:selected').text();
 
                 $('#queue_button').html('Request Song');
                 $('#queue_button').prop('disabled', false);
