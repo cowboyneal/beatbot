@@ -56,10 +56,9 @@ def mpd():
     status = client.status()
 
     data = {
-        'currentsong'  : current_song,
-        'status'       : status,
-        'playlistinfo' : get_plinfo(client),
-        'outputs'      : client.outputs()
+        'currentsong' : current_song,
+        'status'      : status,
+        'playlistinfo': get_plinfo(client)
     }
 
     close_client(client)
@@ -127,14 +126,16 @@ def search(match):
 
     close_client(client)
 
-    data = { 'results' : results }
+    results = [dict(t) for t in set([tuple(d.items()) for d in results])]
+    data = { 'results': results }
+
     return jsonify(data)
 
 @app.route('/playlistinfo')
 def refresh_playlistinfo():
     client = get_client()
 
-    data = { 'playlistinfo' : get_plinfo(client) }
+    data = { 'playlistinfo': get_plinfo(client) }
 
     close_client(client)
     return jsonify(data)
