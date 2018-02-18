@@ -1,3 +1,4 @@
+import os
 import io
 import imghdr
 
@@ -78,7 +79,8 @@ def nocache(view):
     return update_wrapper(no_cache, view)
 
 def get_placeholder_image():
-    image_file = open(PLACEHOLDER_IMAGE, 'rb')
+    image_file = open(os.path.join(app.root_path,
+        'static/' + PLACEHOLDER_IMAGE), 'rb')
     image = image_file.read()
     image_file.close()
 
