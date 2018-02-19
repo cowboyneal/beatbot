@@ -80,7 +80,7 @@ def nocache(view):
 
 def get_placeholder_image():
     image_file = open(os.path.join(app.root_path,
-        'static/' + PLACEHOLDER_IMAGE), 'rb')
+        'static', PLACEHOLDER_IMAGE), 'rb')
     image = image_file.read()
     image_file.close()
 
