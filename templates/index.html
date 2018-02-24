@@ -52,12 +52,12 @@
             <div class="row">
                 <div class="col-10" style="padding-top:15px;">
                     <div class="progress">
-                        <div id="play_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="play-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="col-2" style="padding-top:10px;">
                     <div class="float-right">
-                        <p><span id="play_clock_elapsed"></span>&nbsp;/&nbsp;<span id="play_clock_duration"></span></p>
+                        <p><span id="play-clock-elapsed"></span>&nbsp;/&nbsp;<span id="play-clock-duration"></span></p>
                     </div>
                 </div>
             </div>
@@ -147,11 +147,11 @@
 
             function updateProgress(elapsed, duration) {
                 var progressPerc = Math.trunc((elapsed / duration) * 100);
-                $('#play_progress').attr('style','width: ' + progressPerc +
+                $('#play-progress').attr('style','width: ' + progressPerc +
                     '%');
-                $('#play_progress').attr('aria-valuenow', progressPerc);
-                $('#play_clock_elapsed').text(timeFormat(elapsed));
-                $('#play_clock_duration').text(timeFormat(duration));
+                $('#play-progress').attr('aria-valuenow', progressPerc);
+                $('#play-clock-elapsed').text(timeFormat(elapsed));
+                $('#play-clock-duration').text(timeFormat(duration));
             }
 
             function updateUpNext(playlistInfo) {
