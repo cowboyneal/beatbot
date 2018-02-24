@@ -182,6 +182,7 @@
             function fullRefresh() {
                 var elapsed, duration;
                 var timer = 0;
+                var timeout = Math.trunc(Math.random() * 31) + 45;
 
                 $.ajax({
                     url: 'mpd',
@@ -199,18 +200,23 @@
                         $('#np-album').text(json.currentsong.album + ' (' +
                             json.currentsong.date + ')');
 
-                        elapsed = json.status.elapsed;
-                        duration = json.status.duration;
+                        elapsed = Math.trunc(json.status.elapsed);
+                        duration = Math.trunc(json.status.duration);
                         updateProgress(elapsed, duration);
 
                         updateUpNext(json.playlistinfo);
 
                         var x = setInterval(function() {
-                            elapsed++;
                             timer++;
+                            elapsed++;
+
+                            if (elapsed > duration) {
+                                elapsed = duration;
+                            }
+
                             updateProgress(elapsed, duration);
 
-                            if (timer >= 60) {
+                            if (timer >= timeout) {
                                 getPlaylist();
                                 timer = 0;
                             }
