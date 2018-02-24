@@ -11,7 +11,7 @@ from functools import wraps, update_wrapper
 from datetime import datetime
 app = Flask(__name__)
 
-SONG_FILE_DIRECTORY = '/Users/pater/Music/Mixxx/'
+SONG_FILE_DIRECTORY = '/Users/pater/Music/Mixxx'
 PLACEHOLDER_IMAGE = 'notfound.jpg'
 
 def get_client():
@@ -96,7 +96,7 @@ def album_art(song_id):
     file_name = client.playlistid(song_id)[0]['file']
     close_client(client)
 
-    song_file = File(SONG_FILE_DIRECTORY + file_name)
+    song_file = File(os.path.join(SONG_FILE_DIRECTORY, file_name))
 
     try:
         image_data = song_file.tags['APIC:'].data
