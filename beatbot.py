@@ -158,6 +158,7 @@ def search(match):
     close_client(client)
 
     results = [dict(t) for t in set([tuple(d.items()) for d in results])]
+    results = sorted(results, key=lambda k: k['title'])
     data = { 'results': clean_playlist(results) }
 
     return jsonify(data)
