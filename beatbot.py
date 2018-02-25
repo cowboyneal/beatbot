@@ -58,9 +58,7 @@ def get_plinfo(client):
         list_start = 0
 
     list_end = min(list_start + 10, list_max)
-
     playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
-
     n = len(playlistinfo)
 
     if (n < 10):
