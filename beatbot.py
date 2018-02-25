@@ -10,13 +10,11 @@ from PIL import Image
 from functools import wraps, update_wrapper
 from datetime import datetime
 app = Flask(__name__)
-
-SONG_FILE_DIRECTORY = '/Users/pater/Music/Mixxx'
-PLACEHOLDER_IMAGE = 'notfound.jpg'
+app.config.from_object('config')
 
 def get_client():
     client = MPDClient()
-    client.connect('localhost', 6600)
+    client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
 
     return client
 
@@ -129,7 +127,7 @@ def nocache(view):
 
 def get_placeholder_image():
     image_file = open(os.path.join(app.root_path,
-        'static', PLACEHOLDER_IMAGE), 'rb')
+        'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
     image = image_file.read()
     image_file.close()
 
@@ -145,7 +143,8 @@ def album_art(song_id):
     file_name = client.playlistid(song_id)[0]['file']
     close_client(client)
 
-    song_file = File(os.path.join(SONG_FILE_DIRECTORY, file_name))
+    song_file = File(os.path.join(app.config['SONG_FILE_DIRECTORY'],
+        file_name))
 
     try:
         image_data = song_file.tags['APIC:'].data
