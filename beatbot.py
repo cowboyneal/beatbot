@@ -31,13 +31,11 @@ def beatbot():
 @app.route('/nowplaying.rss')
 def rss():
     client = get_client()
-
     current_song = client.currentsong()
-    now_playing = current_song['title'] + ' - ' + current_song['artist']
-
     close_client(client)
 
-    return render_template('nowplaying.rss', now_playing=now_playing)
+    return render_template('nowplaying.rss', title=current_song['title'],
+            artist=current_song['artist'])
 
 def clean_playlist(playlistinfo):
     for song in playlistinfo:
@@ -57,7 +55,7 @@ def get_plinfo(client):
     list_start = int(current_song['pos']) + 1
     list_max = int(status['playlistlength'])
 
-    if (list_start > list_max):
+    if (list_start == list_max):
         list_start = 0
 
     list_end = min(list_start + 10, list_max)
