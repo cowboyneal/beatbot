@@ -1,7 +1,5 @@
 # Beatbot
 
-- - -
-
 A limited-functionality front-end for [MPD](http://musicpd.org/). For when you
 want to give remote access to your MPD server, but not full control. (There's
 other clients for that) Beatbot allows users to see what song is currently
@@ -11,8 +9,6 @@ playlist in MPD.
 Because the Python bindings for MPD do not yet handle album art, Beatbot needs
 to be installed on the same server as MPD, or to have a copy of the same mp3s
 locally.
-
-- - -
 
 ## License
 
