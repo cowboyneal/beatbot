@@ -39,6 +39,17 @@ def rss():
 
     return render_template('nowplaying.rss', now_playing=now_playing)
 
+def clean_playlist(playlistinfo):
+    for song in playlistinfo:
+        del song['date']
+        del song['disc']
+        del song['file']
+        del song['genre']
+        del song['last-modified']
+        del song['track']
+
+    return playlistinfo
+
 def get_plinfo(client):
     current_song = client.currentsong()
     status = client.status()
@@ -49,15 +60,7 @@ def get_plinfo(client):
 
     playlistinfo = client.playlistinfo(list_start + ":" + list_end)
 
-    for song in playlistinfo:
-        del song['date']
-        del song['disc']
-        del song['file']
-        del song['genre']
-        del song['last-modified']
-        del song['track']
-
-    return playlistinfo
+    return clean_playlist(playlistinfo)
 
 @app.route('/mpd')
 def mpd():
@@ -155,7 +158,7 @@ def search(match):
     close_client(client)
 
     results = [dict(t) for t in set([tuple(d.items()) for d in results])]
-    data = { 'results': results }
+    data = { 'results': clean_playlist(results) }
 
     return jsonify(data)
 
