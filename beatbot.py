@@ -24,7 +24,9 @@ def close_client(client):
 
 @app.route('/')
 def beatbot():
-    return render_template('index.html')
+    return render_template('index.html',
+            stream_url=app.config['STREAM_URL'],
+            stream_text=app.config['STREAM_TEXT'])
 
 @app.route('/nowplaying.rss')
 def rss():
