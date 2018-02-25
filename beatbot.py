@@ -54,11 +54,20 @@ def get_plinfo(client):
     current_song = client.currentsong()
     status = client.status()
 
-    list_start = str(int(current_song['pos']) + 1)
-    list_end = str(min(int(current_song['pos']) + 11,
-            int(status['playlistlength']) - 1))
+    list_start = int(current_song['pos']) + 1
+    list_max = int(status['playlistlength']) - 1
 
-    playlistinfo = client.playlistinfo(list_start + ":" + list_end)
+    if (list_start > list_max):
+        list_start = 1
+
+    list_end = min(list_start + 9, list_max)
+
+    playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
+
+    n = len(playlistinfo)
+
+    if (n < 10):
+        playlistinfo += client.playlistinfo('1:' + str(10 - n))
 
     return clean_playlist(playlistinfo)
 
