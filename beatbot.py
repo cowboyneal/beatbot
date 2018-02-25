@@ -47,7 +47,17 @@ def get_plinfo(client):
     list_end = str(min(int(current_song['pos']) + 11,
             int(status['playlistlength']) - 1))
 
-    return client.playlistinfo(list_start + ":" + list_end)
+    playlistinfo = client.playlistinfo(list_start + ":" + list_end)
+
+    for song in playlistinfo:
+        del song['date']
+        del song['disc']
+        del song['file']
+        del song['genre']
+        del song['last-modified']
+        del song['track']
+
+    return playlistinfo
 
 @app.route('/mpd')
 def mpd():
