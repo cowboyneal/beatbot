@@ -64,7 +64,23 @@ def mpd():
     client = get_client()
 
     current_song = client.currentsong()
+    del current_song['disc']
+    del current_song['file']
+    del current_song['genre']
+    del current_song['last-modified']
+    del current_song['track']
+
     status = client.status()
+    del status['audio']
+    del status['bitrate']
+    del status['consume']
+    del status['mixrampdb']
+    del status['random']
+    del status['repeat']
+    del status['single']
+    del status['state']
+    del status['volume']
+    del status['xfade']
 
     data = {
         'currentsong' : current_song,
