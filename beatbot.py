@@ -2,13 +2,12 @@ import os
 import io
 import imghdr
 
-from flask import Flask
-from flask import render_template, jsonify, send_file, make_response
-from musicpd import MPDClient
-from mutagen import File
-from PIL import Image
+from flask     import Flask. render_template, jsonify, send_file, make_response
+from musicpd   import MPDClient
+from mutagen   import File
+from PIL       import Image
 from functools import wraps, update_wrapper
-from datetime import datetime
+from datetime  import datetime
 app = Flask(__name__)
 app.config.from_object('config')
 
@@ -34,7 +33,8 @@ def rss():
     current_song = client.currentsong()
     close_client(client)
 
-    return render_template('nowplaying.rss', title=current_song['title'],
+    return render_template('nowplaying.rss',
+            title=current_song['title'],
             artist=current_song['artist'])
 
 def clean_playlist(playlistinfo):
@@ -59,12 +59,13 @@ def get_plinfo(client):
     if (list_start == list_max):
         list_start = 0
 
-    list_end = min(list_start + 10, list_max)
+    list_end = min(list_start + app.config['UP_NEXT_LENGTH'], list_max)
     playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
     n = len(playlistinfo)
 
-    if (n < 10):
-        playlistinfo += client.playlistinfo('0:' + str(10 - n))
+    if (n < app.config['UP_NEXT_LENGTH']):
+        playlistinfo += client.playlistinfo('0:' +
+            str(app.config['UP_NEXT_LENGTH'] - n))
 
     return clean_playlist(playlistinfo)
 
