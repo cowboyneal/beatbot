@@ -172,26 +172,13 @@
                 });
             }
 
-            function getPlaylist() {
-                $.ajax({
-                    url: 'playlistinfo',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(json) {
-                        updateUpNext(json.playlistinfo);
-                    },
-                    error: function(xhr, status) {
-                    }
-                });
-            }
-
             function fullRefresh() {
                 var elapsed, duration;
                 var timer = 0;
-                var timeout = Math.trunc(Math.random() * 31) + 45;
+                var timeout = Math.trunc(Math.random() * 31) + 60;
 
                 $.ajax({
-                    url: 'mpd',
+                    url: 'now_playing',
                     type: 'GET',
                     dataType: 'json',
                     success: function(json) {
@@ -206,14 +193,35 @@
                         $('#np-album').text(json.currentsong.album + ' (' +
                             json.currentsong.date + ')');
 
-                        elapsed = Math.trunc(json.status.elapsed);
-                        duration = Math.trunc(json.status.duration);
+                        elapsed = Math.floor(json.status.elapsed);
+                        duration = Math.ceil(json.status.duration);
                         updateProgress(elapsed, duration);
 
                         updateUpNext(json.playlistinfo);
 
                         var x = setInterval(function() {
                             timer++;
+
+                            if (timer >= timeout &&
+                                    (duration - elapsed) > 2) {
+                                $.ajax({
+                                    url: 'playlistinfo',
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function(json) {
+                                        elapsed = Math.floor(json.status.elapsed);
+                                        duration = Math.ceil(json.status.duration);
+                                        updateProgress(elapsed, duration);
+                                        updateUpNext(json.playlistinfo);
+                                    },
+                                    error: function(xhr, status) {
+                                    }
+                                });
+
+                                timer = 0;
+                                return;
+                            }
+
                             elapsed++;
 
                             if (elapsed > duration) {
@@ -221,11 +229,6 @@
                             }
 
                             updateProgress(elapsed, duration);
-
-                            if (timer >= timeout) {
-                                getPlaylist();
-                                timer = 0;
-                            }
 
                             if (elapsed >= duration) {
                                 clearInterval(x);

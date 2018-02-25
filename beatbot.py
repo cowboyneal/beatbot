@@ -41,6 +41,7 @@ def clean_playlist(playlistinfo):
     for song in playlistinfo:
         del song['date']
         del song['disc']
+        del song['duration']
         del song['file']
         del song['genre']
         del song['last-modified']
@@ -69,32 +70,44 @@ def get_plinfo(client):
 
     return clean_playlist(playlistinfo)
 
-@app.route('/mpd')
-def mpd():
-    client = get_client()
-
-    current_song = client.currentsong()
-    del current_song['disc']
-    del current_song['file']
-    del current_song['genre']
-    del current_song['last-modified']
-    del current_song['track']
-
+def get_clean_status(client):
     status = client.status()
     del status['audio']
     del status['bitrate']
     del status['consume']
     del status['mixrampdb']
+    del status['nextsong']
+    del status['nextsongid']
+    del status['playlist']
+    del status['playlistlength']
     del status['random']
     del status['repeat']
     del status['single']
+    del status['song']
+    del status['songid']
     del status['state']
+    del status['time']
     del status['volume']
     del status['xfade']
 
+    return status
+
+@app.route('/now_playing')
+def now_playing():
+    client = get_client()
+
+    current_song = client.currentsong()
+    del current_song['disc']
+    del current_song['duration']
+    del current_song['file']
+    del current_song['genre']
+    del current_song['last-modified']
+    del current_song['time']
+    del current_song['track']
+
     data = {
         'currentsong' : current_song,
-        'status'      : status,
+        'status'      : get_clean_status(client),
         'playlistinfo': get_plinfo(client)
     }
 
@@ -174,7 +187,10 @@ def search(match):
 def refresh_playlistinfo():
     client = get_client()
 
-    data = { 'playlistinfo': get_plinfo(client) }
+    data = {
+        'playlistinfo': get_plinfo(client),
+        'status'      : get_clean_status(client)
+    }
 
     close_client(client)
     return jsonify(data)
