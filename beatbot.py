@@ -2,7 +2,7 @@ import os
 import io
 import imghdr
 
-from flask     import Flask. render_template, jsonify, send_file, make_response
+from flask     import Flask, render_template, jsonify, send_file, make_response
 from musicpd   import MPDClient
 from mutagen   import File
 from PIL       import Image
