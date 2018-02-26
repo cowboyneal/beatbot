@@ -140,6 +140,7 @@
         </div>
         <script>
             var timerFunction, currentSongId;
+            var lastTimer = 0;
 
             function timeFormat(time) {
                 var minutes = Math.trunc(time / 60);
@@ -237,6 +238,7 @@
 
                             if (elapsed >= duration) {
                                 clearInterval(timerFunction);
+                                timerFunction = false;
                                 fullRefresh();
                             }
                         }, 1000);
@@ -249,9 +251,15 @@
             $(function () {
                 document.addEventListener('visibilitychange', function() {
                     if (document.hidden) {
-                        clearInterval(timerFunction);
+                        if (Date.now() - lastTimer > 100) {
+                            clearInterval(timerFunction);
+                            timerFunction = false;
+                        }
                     } else {
-                        fullRefresh();
+                        if (!timerFunction) {
+                            lastTimer = Date.now();
+                            fullRefresh();
+                        }
                     }
                 });
 
