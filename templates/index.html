@@ -9,7 +9,6 @@
     </head>
     <body>
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="static/HackTimer.silent.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -140,6 +139,8 @@
             </div>
         </div>
         <script>
+            var timerFunction, currentSongId;
+
             function timeFormat(time) {
                 var minutes = Math.trunc(time / 60);
                 var seconds = Math.trunc(time % 60);
@@ -186,8 +187,12 @@
                             json.currentsong.title + ' - ' +
                             json.currentsong.artist);
 
-                        $('#np-thumb').attr('src', 'album_art/' +
-                            json.currentsong.id);
+                        if (json.currentsong.id != currentSongId) {
+                            $('#np-thumb').attr('src', 'album_art/' +
+                                json.currentsong.id);
+                            currentSongId = json.currentsong.id;
+                        }
+
                         $('#np-name').text(json.currentsong.title);
                         $('#np-artist').text(json.currentsong.artist);
                         $('#np-album').text(json.currentsong.album + ' (' +
@@ -199,7 +204,7 @@
 
                         updateUpNext(json.playlistinfo);
 
-                        var x = setInterval(function() {
+                        timerFunction = setInterval(function() {
                             timer++;
 
                             if (timer >= timeout &&
@@ -231,7 +236,7 @@
                             updateProgress(elapsed, duration);
 
                             if (elapsed >= duration) {
-                                clearInterval(x);
+                                clearInterval(timerFunction);
                                 fullRefresh();
                             }
                         }, 1000);
@@ -242,6 +247,14 @@
             }
 
             $(function () {
+                document.addEventListener('visibilitychange', function() {
+                    if (document.hidden) {
+                        clearInterval(timerFunction);
+                    } else {
+                        fullRefresh();
+                    }
+                });
+
                 fullRefresh();
             });
 
