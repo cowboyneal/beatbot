@@ -6,6 +6,14 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha384-MtIP/3oPOnaTWtZGXE7C1YfcWSIgL8W+tyWY425Vav0Uten58co0sWnIfridWjr9" crossorigin="anonymous">
         <title>Beatbot</title>
+        <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+        }
+        </style>
     </head>
     <body>
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -21,7 +29,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h2 style="margin-top:.5rem;">Now Playing</h2>
+                    <h3 style="margin-top:.5rem;">Now Playing</h3>
                 </div>
             </div>
         </div>
@@ -63,7 +71,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h2>Up Next</h2>
+                    <h3>Up Next</h3>
                 </div>
             </div>
         </div>
