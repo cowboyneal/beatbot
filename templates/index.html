@@ -8,6 +8,11 @@
         <title>Beatbot</title>
         <style>
         body {
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+
             font-family: "Helvetica Neue", Arial, sans-serif;
         }
         h1, h2, h3, h4, h5, h6 {
@@ -22,15 +27,6 @@
         body, html {
             height: 100%;
         }
-        .bg {
-            background-image: url("{{ url_for('static', filename='background.jpg') }}");
-
-            height: 100%;
-
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
         </style>
     </head>
     <body>
@@ -39,98 +35,96 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-        <div class="bg">
-            <nav class="navbar navbar-dark bg-dark">
-                <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
-                <span class="navbar-text">Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a></span>
-                <span class="navbar-text"><a href="nowplaying.rss" class="text-warning"><i class="fas fa-rss-square"></i></a></span>
-            </nav>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h3 class="mt-2">Now Playing</h3>
-                    </div>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
+            <span class="navbar-text">Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a></span>
+            <span class="navbar-text"><a href="nowplaying.rss" class="text-warning"><i class="fas fa-rss-square"></i></a></span>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3 class="mt-2">Now Playing</h3>
                 </div>
             </div>
-            <div class="container border border-secondary">
-                <div class="row pt-3">
-                    <div class="col-sm-auto">
-                        <img id="np-thumb" class="img-thumbnail rounded">
-                    </div>
-                    <div class="col pl-0">
-                        <div class="d-flex flex-column align-items-start justify-content-between h-100">
-                            <div class="pb-2 align-self-stretch h-100">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h4 id="np-name" class="card-title text-light">Song Name</h4>
-                                        <h5 id="np-artist" class="card-subtitle mb-2">Artist</h5>
-                                        <p id="np-album" class="card-text text-light">Album (Year)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-auto pt-2">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#search-modal"><i class="far fa-star"></i> Request A Song</button>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+        <div class="container border border-secondary">
+            <div class="row pt-3">
+                <div class="col-sm-auto">
+                    <img id="np-thumb" class="img-thumbnail rounded">
                 </div>
-                <div class="row">
-                    <div class="col pt-3">
-                        <div class="progress">
-                            <div id="play-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-auto pt-2 pl-0 mb-3">
-                        <div class="card">
-                            <div class="card-body py-1 px-2">
-                                <div class="text-center">
-                                    <p class="text-primary mb-0">
-                                        <span class="align-top">
-                                            <b><span id="play-clock-elapsed"></span>&nbsp;/&nbsp;<span id="play-clock-duration"></span></b>
-                                        </span>
-                                    </p>
+                <div class="col pl-0">
+                    <div class="d-flex flex-column align-items-start justify-content-between h-100">
+                        <div class="pb-2 align-self-stretch h-100">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 id="np-name" class="card-title text-light">Song Name</h4>
+                                    <h5 id="np-artist" class="card-subtitle mb-2">Artist</h5>
+                                    <p id="np-album" class="card-text text-light">Album (Year)</p>
                                 </div>
                             </div>
                         </div>
+                        <div class="mt-auto pt-2">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#search-modal"><i class="far fa-star"></i> Request A Song</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h3>Up Next</h3>
+            <div class="row">
+                <div class="col pt-3">
+                    <div class="progress">
+                        <div id="play-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
-            </div>
-            <div class="container border border-secondary mb-3">
-                <div class="row">
-                    <div class="col p-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <table id="playlist" class="table table-sm table-striped table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Artist</th>
-                                            <th scope="col">Album</th>
-                                            <th scope-"col">Length</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                <div class="col-sm-auto pt-2 pl-0 mb-3">
+                    <div class="card">
+                        <div class="card-body py-1 px-2">
+                            <div class="text-center">
+                                <p class="text-primary mb-0">
+                                    <span class="align-top">
+                                        <b><span id="play-clock-elapsed"></span>&nbsp;/&nbsp;<span id="play-clock-duration"></span></b>
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="container border border-secondary">
-                <div class="row">
-                    <div class="col-12 p-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <p class="card-text text-light">Thanks for listening!</p>
-                            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3>Up Next</h3>
+                </div>
+            </div>
+        </div>
+        <div class="container border border-secondary mb-3">
+            <div class="row">
+                <div class="col p-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="playlist" class="table table-sm table-striped table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Artist</th>
+                                        <th scope="col">Album</th>
+                                        <th scope-"col">Length</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container border border-secondary">
+            <div class="row">
+                <div class="col-12 p-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text text-light">Thanks for listening!</p>
                         </div>
                     </div>
                 </div>
