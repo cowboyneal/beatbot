@@ -38,14 +38,20 @@ def rss():
             artist=current_song['artist'])
 
 def clean_playlist(playlistinfo):
+    keys = [
+        'date',
+        'disc',
+        'duration',
+        'file',
+        'genre',
+        'last-modified',
+        'track'
+    ]
+
     for song in playlistinfo:
-        del song['date']
-        del song['disc']
-        del song['duration']
-        del song['file']
-        del song['genre']
-        del song['last-modified']
-        del song['track']
+        for k in keys:
+            if k in song:
+                del song[k]
 
     return playlistinfo
 
@@ -71,23 +77,30 @@ def get_plinfo(client):
 
 def get_clean_status(client):
     status = client.status()
-    del status['audio']
-    del status['bitrate']
-    del status['consume']
-    del status['mixrampdb']
-    del status['nextsong']
-    del status['nextsongid']
-    del status['playlist']
-    del status['playlistlength']
-    del status['random']
-    del status['repeat']
-    del status['single']
-    del status['song']
-    del status['songid']
-    del status['state']
-    del status['time']
-    del status['volume']
-    del status['xfade']
+
+    keys = [
+        'audio',
+        'bitrate',
+        'consume',
+        'mixrampdb',
+        'nextsong',
+        'nextsongid',
+        'playlist',
+        'playlistlength',
+        'random',
+        'repeat',
+        'single',
+        'song',
+        'songid',
+        'state',
+        'time',
+        'volume',
+        'xfade'
+    ]
+
+    for k in keys:
+        if k in status:
+            del status[k]
 
     return status
 
@@ -96,13 +109,20 @@ def now_playing():
     client = get_client()
 
     current_song = client.currentsong()
-    del current_song['disc']
-    del current_song['duration']
-    del current_song['file']
-    del current_song['genre']
-    del current_song['last-modified']
-    del current_song['time']
-    del current_song['track']
+
+    keys = [
+        'disc',
+        'duration',
+        'file',
+        'genre',
+        'last-modified',
+        'time',
+        'track'
+    ]
+
+    for k in keys:
+        if k in current_song:
+            del current_song[k]
 
     data = {
         'currentsong' : current_song,
