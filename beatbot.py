@@ -192,8 +192,11 @@ def album_art(song_id):
 def search(match):
     client = get_client()
 
-    results = client.playlistsearch('title', match)
-    results += client.playlistsearch('artist', match)
+    results = []
+
+    for word in match.split(' '):
+        results += client.playlistsearch('title', word)
+        results += client.playlistsearch('artist', word)
 
     close_client(client)
 
