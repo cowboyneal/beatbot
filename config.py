@@ -1,4 +1,4 @@
-SONG_FILE_DIRECTORY = '/Users/pater/Music/Mixxx'
+SONG_FILE_DIRECTORY = '/Users/pater/Music/mpd'
 PLACEHOLDER_IMAGE   = 'notfound.jpg'
 MPD_ADDRESS         = 'localhost'
 MPD_PORT            = 6600
