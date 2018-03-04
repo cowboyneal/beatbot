@@ -193,8 +193,23 @@ def search(match):
     client = get_client()
 
     results = []
+    lastword = '';
 
-    for word in match.split(' '):
+    for word in match.split():
+        if word.startswith('"'):
+            if not word.endswith('"'):
+                lastword = word[1:]
+                continue
+            else:
+                word = word[1:-1]
+        elif lastword:
+            if word.endswith('"'):
+                word = lastword + ' ' + word[:-1]
+                lastword = '';
+            else:
+                lastword += ' ' + word
+                continue
+
         results += client.playlistsearch('title', word)
         results += client.playlistsearch('artist', word)
 
