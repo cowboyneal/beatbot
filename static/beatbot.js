@@ -137,12 +137,16 @@ function enableRequestSubmit() {
     $('#queue-button').prop('disabled', false);
 }
 
-function submitRequest() {
-    var song_id = $('#song-select').val();
-
+function resetSubmitForm() {
     $('#search-term').val('');
     $('option').remove();
     $('#queue-button').prop('disabled', true);
+}
+
+function submitRequest() {
+    var song_id = $('#song-select').val();
+
+    resetSubmitForm();
     $('#search-modal').modal('hide');
 
     $.ajax({

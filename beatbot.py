@@ -193,7 +193,8 @@ def search(match):
     client = get_client()
 
     results = []
-    lastword = '';
+    neg_results = []
+    lastword = ''
 
     for word in match.split():
         if word.startswith('"'):
@@ -209,6 +210,10 @@ def search(match):
             else:
                 lastword += ' ' + word
                 continue
+        elif word.startswith('-'):
+            neg_results += client.playlistsearch('title', word[1:])
+            neg_results += client.playlistsearch('artist', word[1:])
+            continue
 
         results += client.playlistsearch('title', word)
         results += client.playlistsearch('artist', word)
@@ -216,6 +221,9 @@ def search(match):
     close_client(client)
 
     results = [dict(t) for t in set([tuple(d.items()) for d in results])]
+    neg_results = [dict(t) for t in set([tuple(d.items())
+        for d in neg_results])]
+    results = [item for item in results if item not in neg_results]
     results = sorted(results, key=lambda k: k['title'])
     data = { 'results': clean_playlist(results) }
 
