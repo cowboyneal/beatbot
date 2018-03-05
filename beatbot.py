@@ -188,11 +188,10 @@ def album_art(song_id):
     image = image.resize((250, 250), Image.ANTIALIAS)
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
-    image_data = image_data.getvalue()
+    image_data.seek(0)
 
-    return send_file(io.BytesIO(image_data),
-        attachment_filename=str(song_id) + '.' + image_type,
-        mimetype='image/' + image_type)
+    return send_file(image_data, attachment_filename=str(song_id) +
+        '.' + image_type, mimetype='image/' + image_type)
 
 @app.route('/search/<string:match>')
 def search(match):
