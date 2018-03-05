@@ -167,10 +167,16 @@ def album_art(song_id):
     song_file = File(os.path.join(app.config['SONG_FILE_DIRECTORY'],
         file_name))
 
-    try:
-        image_data = song_file.tags['APIC:'].data
-    except:
-        image_data = get_placeholder_image()
+    if file_name.endswith('mp3'):
+        try:
+            image_data = song_file.tags['APIC:'].data
+        except:
+            image_data = get_placeholder_image()
+    elif file_name.endswith('flac'):
+        try:
+            image_data = song_file.pictures[0].data
+        except:
+            image_data = get_placeholder_image()
 
     image_type = get_image_type(image_data)
 
