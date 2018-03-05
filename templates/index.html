@@ -1,252 +1,244 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha384-MtIP/3oPOnaTWtZGXE7C1YfcWSIgL8W+tyWY425Vav0Uten58co0sWnIfridWjr9" crossorigin="anonymous">
-        <title>Beatbot</title>
-        <style>
-        body {
-            background-image: url("{{ url_for('static', filename='background.jpg') }}");
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-size: cover;
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha384-MtIP/3oPOnaTWtZGXE7C1YfcWSIgL8W+tyWY425Vav0Uten58co0sWnIfridWjr9" crossorigin="anonymous">
+    <title>Beatbot</title>
+    <style>
+    body {
+        background-image: url("{{ url_for('static', filename='background.jpg') }}");
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
 
-            font-family: "Helvetica Neue", Arial, sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: bold;
-        }
-        .table thead th {
-            border-bottom: 2px solid #555;
-            border-top: 1px solid #555;
-        }
-        .table.table-sm tr td {
-            border-top: 1px solid #555;
-        }
-        body, html {
-            height: 100%;
-        }
-        .card, nav, .modal-content {
-            background-image: linear-gradient(#282828, #060606);
-        }
-        .btn-primary, .progress-bar {
-            background-image: linear-gradient(var(--primary), #2a2fd6);
-        }
-        .btn-outline-primary {
-            background-image: linear-gradient(var(--gray), #060606);
-            border-color: #2a7fd6;
-        }
-        .progress {
-            background-image: linear-gradient(#060606, #282828);
-        }
-        .text-primary, .btn-outline-primary {
-            color: #2a7fd6 !important;
-        }
-        </style>
-    </head>
-    <body>
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-        <nav class="navbar navbar-dark bg-dark">
-            <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
-            <span class="navbar-text">Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a></span>
-            <span class="navbar-text"><a href="nowplaying.rss" class="text-warning"><i class="fas fa-rss-square"></i></a></span>
-        </nav>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h3 class="mt-3">Now Playing</h3>
-                </div>
-            </div>
+        font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+    }
+    .table thead th {
+        border-bottom: 2px solid #555;
+        border-top: 1px solid #555;
+    }
+    .table.table-sm tr td {
+        border-top: 1px solid #555;
+    }
+    body, html {
+        height: 100%;
+    }
+    .card, nav, .modal-content {
+        background-image: linear-gradient(#282828, #060606);
+    }
+    .btn-primary, .progress-bar {
+        background-image: linear-gradient(var(--primary), #2a2fd6);
+    }
+    .btn-outline-primary {
+        background-image: linear-gradient(var(--gray), #060606);
+        border-color: #2a7fd6;
+    }
+    .progress {
+        background-image: linear-gradient(#060606, #282828);
+    }
+    .text-primary, .btn-outline-primary {
+        color: #2a7fd6 !important;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
+      <span class="navbar-text">Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a></span>
+      <span class="navbar-text"><a href="nowplaying.rss" class="text-warning"><i class="fas fa-rss-square"></i></a></span>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h3 class="mt-3">Now Playing</h3>
         </div>
-        <div class="container border border-secondary">
-            <div class="row py-3">
+      </div>
+    </div>
+    <div class="container border border-secondary">
+      <div class="row py-3">
+        <div class="col-sm-auto">
+          <img id="np-thumb"
+              class="img-thumbnail rounded"
+              src="{{ url_for('static', filename='notfound.jpg') }}"
+              alt="Album art"
+          >
+        </div>
+        <div class="col pl-0">
+          <div class="d-flex flex-column align-items-start justify-content-between h-100">
+            <div class="pb-3 align-self-stretch h-100">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h4 id="np-name" class="card-title text-light">Song Name</h4>
+                  <h5 id="np-artist" class="card-subtitle mb-2">Artist</h5>
+                  <h5 class="card-title">
+                    <span id="np-album" class="text-light">Album</span>
+                    <span id="np-year">Year</span>
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div class="mt-auto align-self-stretch">
+              <div class="row">
+                <div class="col-sm-auto pr-0">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#search-modal"><i class="far fa-star"></i> Request A Song</button>
+                </div>
+                <div class="col py-2 pr-0">
+                  <div class="progress">
+                    <div id="play-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
                 <div class="col-sm-auto">
-                    <img id="np-thumb"
-                        class="img-thumbnail rounded"
-                        src="{{ url_for('static', filename='notfound.jpg') }}"
-                        alt="Album art"
-                    >
-                </div>
-                <div class="col pl-0">
-                    <div class="d-flex flex-column align-items-start justify-content-between h-100">
-                        <div class="pb-3 align-self-stretch h-100">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h4 id="np-name" class="card-title text-light">Song Name</h4>
-                                    <h5 id="np-artist" class="card-subtitle mb-2">Artist</h5>
-                                    <h5 class="card-title">
-                                        <span id="np-album" class="text-light">Album</span>
-                                        <span id="np-year">Year</span>
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-auto align-self-stretch">
-                           <div class="row">
-                               <div class="col-sm-auto pr-0">
-                                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#search-modal"><i class="far fa-star"></i> Request A Song</button>
-                               </div>
-                               <div class="col py-2 pr-0">
-                                   <div class="progress">
-                                       <div id="play-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                   </div>
-                               </div>
-                               <div class="col-sm-auto">
-                                   <div class="card">
-                                       <div class="card-body py-1 px-2">
-                                           <div class="text-center">
-                                               <p class="text-primary mb-0">
-                                                   <span class="align-top">
-                                                       <b><span id="play-clock-elapsed">0:00</span>&nbsp;/&nbsp;<span id="play-clock-duration">0:00</span></b>
-                                                   </span>
-                                               </p>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                        </div>
+                  <div class="card">
+                    <div class="card-body py-1 px-2">
+                      <div class="text-center">
+                        <p class="text-primary mb-0">
+                          <span class="align-top">
+                            <b><span id="play-clock-elapsed">0:00</span>&nbsp;/&nbsp;<span id="play-clock-duration">0:00</span></b>
+                          </span>
+                        </p>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="container">
-            <div class="row">
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h3 class="mt-3">Up Next</h3>
+        </div>
+      </div>
+    </div>
+    <div class="container border border-secondary mb-3">
+      <div class="row">
+        <div class="col p-3">
+          <div class="card">
+            <div class="card-body">
+              <table id="playlist" class="table table-sm table-striped table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Artist</th>
+                    <th scope="col">Album</th>
+                    <th scope="col">Length</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container border border-secondary mb-4">
+      <div class="row">
+        <div class="col-12 p-3">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text text-light">Thanks for listening!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="search-modal-title" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="search-modal-title">Request A Song</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetSearchForm(true);">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row text-light">
                 <div class="col">
-                    <h3 class="mt-3">Up Next</h3>
+                    <p><b>Search Tips</b></p>
                 </div>
-            </div>
-        </div>
-        <div class="container border border-secondary mb-3">
-            <div class="row">
-                <div class="col p-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <table id="playlist" class="table table-sm table-striped table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Artist</th>
-                                        <th scope="col">Album</th>
-                                        <th scope="col">Length</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+              </div>
+              <dl class="row text-light mb-0">
+                <dt class="col-sm-4">
+                  <code>&lt;keyword1&gt;&nbsp;&lt;keyword2&gt;</code>
+                </dt>
+                <dd class="col-sm-8">
+                  Find songs that match <code>&lt;keyword1&gt;</code> or
+                  <code>&lt;keyword2&gt;</code>.
+                </dd>
+                <dt class="col-sm-4">
+                  <code>"&lt;keyphrase&gt;"</code>
+                </dt>
+                <dd class="col-sm-8">
+                  Find songs that match <code>&lt;keyphrase&gt;</code>.
+                </dd>
+                <dt class="col-sm-4">
+                  <code>-&lt;keyword&gt;</code>
+                </dt>
+                <dd class="col-sm-8">
+                  Exclude songs that match <code>&lt;keyword&gt;</code>.
+                </dd>
+              </dl>
+              <div class="row text-light pb-3">
+                <div class="col-12">
+                  <ul>
+                    <li>All searches are case-insensitive.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row pb-3">
+                <div class="col">
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="search-term" placeholder="Find a song" aria-label="Text to match">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-primary" type="button" onclick="searchSongs();">Search</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <form>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-4">
+                          <label class="text-light" for="song-select">
+                            <b>Matches</b>
+                          </label>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container border border-secondary mb-4">
-            <div class="row">
-                <div class="col-12 p-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text text-light">Thanks for listening!</p>
+                        <div class="col-8">
+                          <label id="search-error" class="text-warning" for="song-select" style="display:none;">Sorry, no matches were found.</label>
                         </div>
+                      </div>
+                      <select id="song-select" class="form-control" size="10" onchange="enableRequestSubmit();">
+                      </select>
                     </div>
+                  </form>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="modal-footer">
+              <button id="queue-button" type="button" class="btn btn-primary" onclick="submitRequest();" disabled>Request Song</button>
+          </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="search-modal-title" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="search-modal-title">Request A Song</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetSearchForm(true);">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row text-light">
-                                <div class="col">
-                                    <p><b>Search Tips</b></p>
-                                </div>
-                            </div>
-                            <dl class="row text-light mb-0">
-                                <dt class="col-sm-4">
-                                    <code>
-                                    &lt;keyword1&gt;&nbsp;&lt;keyword2&gt;
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                    Find songs that match
-                                    <code>&lt;keyword1&gt;</code> or
-                                    <code>&lt;keyword2&gt;</code>.
-                                </dd>
-                                <dt class="col-sm-4">
-                                    <code>
-                                    "&lt;keyphrase&gt;"
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                   Find songs that match
-                                   <code>&lt;keyphrase&gt;</code>.
-                                </dd>
-                                <dt class="col-sm-4">
-                                    <code>
-                                    -&lt;keyword&gt;
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                    Exclude songs that match 
-                                    <code>&lt;keyword&gt;</code>.
-                                </dd>
-                            </dl>
-                            <div class="row text-light pb-3">
-                                <div class="col-12">
-                                    <ul>
-                                        <li>All searches are
-                                            case-insensitive.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row pb-3">
-                                <div class="col">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="search-term" placeholder="Find a song" aria-label="Text to match">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-primary" type="button" onclick="searchSongs();">Search</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <form>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <label class="text-light" for="song-select"><b>Matches</b></label>
-                                                </div>
-                                                <div class="col-8">
-                                                    <label id="search-error" class="text-warning" for="song-select" style="display:none;">Sorry, no matches were found.</label>
-                                                </div>
-                                            </div>
-                                            <select id="song-select" class="form-control" size="10" onchange="enableRequestSubmit();">
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="queue-button" type="button" class="btn btn-primary" onclick="submitRequest();" disabled>Request Song</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="{{ url_for('static', filename='beatbot.js') }}"></script>
-    </body>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='beatbot.js') }}"></script>
+  </body>
 </html>
