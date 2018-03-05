@@ -67,7 +67,11 @@
         <div class="container border border-secondary">
             <div class="row py-3">
                 <div class="col-sm-auto">
-                    <img id="np-thumb" class="img-thumbnail rounded">
+                    <img id="np-thumb"
+                        class="img-thumbnail rounded"
+                        src="{{ url_for('static', filename='notfound.jpg') }}"
+                        alt="Album art"
+                    >
                 </div>
                 <div class="col pl-0">
                     <div class="d-flex flex-column align-items-start justify-content-between h-100">
@@ -130,7 +134,7 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Artist</th>
                                         <th scope="col">Album</th>
-                                        <th scope-"col">Length</th>
+                                        <th scope="col">Length</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -165,34 +169,36 @@
                     <div class="modal-body">
                         <div class="container">
                             <div class="row text-light pb-3">
-                                <dt class="col-sm-4">
-                                    <code>
-                                    &lt;keyword1&gt;&nbsp;&lt;keyword2&gt;
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                    Find songs that match
-                                    <code>&lt;keyword1&gt;</code> or
-                                    <code>&lt;keyword2&gt;</code>.
-                                </dd>
-                                <dt class="col-sm-4">
-                                    <code>
-                                    "&lt;keyphrase&gt;"
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                   Find songs that match
-                                   <code>&lt;keyphrase&gt;</code>.
-                                </dd>
-                                <dt class="col-sm-4">
-                                    <code>
-                                    -&lt;keyword&gt;
-                                    </code>
-                                </dt>
-                                <dd class="col-sm-8">
-                                    Exclude songs that match 
-                                    <code>&lt;keyword&gt;</code>.
-                                </dd>
+                                <dl>
+                                    <dt class="col-sm-4">
+                                        <code>
+                                        &lt;keyword1&gt;&nbsp;&lt;keyword2&gt;
+                                        </code>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        Find songs that match
+                                        <code>&lt;keyword1&gt;</code> or
+                                        <code>&lt;keyword2&gt;</code>.
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <code>
+                                        "&lt;keyphrase&gt;"
+                                        </code>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                       Find songs that match
+                                       <code>&lt;keyphrase&gt;</code>.
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <code>
+                                        -&lt;keyword&gt;
+                                        </code>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        Exclude songs that match 
+                                        <code>&lt;keyword&gt;</code>.
+                                    </dd>
+                                </dl>
                                 <div class="col-12">
                                     <ul>
                                         <li>All searches are
@@ -203,7 +209,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="search-term" placeholder="Find a song" aria-label="Text to match" aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control" id="search-term" placeholder="Find a song" aria-label="Text to match">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary" type="button" onclick="searchSongs();">Search</button>
                                         </div>
