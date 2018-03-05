@@ -110,11 +110,10 @@ function fullRefresh() {
 function searchSongs() {
     var match = $('#search-term').val();
 
-    $('#search-error').hide();
+    resetSearchForm(false);
 
     if (match.length === 0 || !match.trim()) {
         $('#search-error').show();
-        $('option').remove();
         return;
     }
 
@@ -123,8 +122,6 @@ function searchSongs() {
         type: 'GET',
         dataTyoe: 'json',
         success: function(json) {
-            $('option').remove();
-
             if (json.results.length == 0) {
                 $('#search-error').show();
                 return;
@@ -141,13 +138,15 @@ function searchSongs() {
 
 function enableRequestSubmit() {
     // var selection = $('#song-select option:selected').text();
-
-    $('#queue-button').html('Request Song');
+    // $('#queue-button').html('Request Song');
     $('#queue-button').prop('disabled', false);
 }
 
-function resetSubmitForm() {
-    $('#search-term').val('');
+function resetSearchForm(wipeInput) {
+    if (wipeInput) {
+        $('#search-term').val('');
+    }
+
     $('#search-error').hide();
     $('option').remove();
     $('#queue-button').prop('disabled', true);
@@ -156,7 +155,7 @@ function resetSubmitForm() {
 function submitRequest() {
     var song_id = $('#song-select').val();
 
-    resetSubmitForm();
+    resetSearchForm(true);
     $('#search-modal').modal('hide');
 
     $.ajax({
