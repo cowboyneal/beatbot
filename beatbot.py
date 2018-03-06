@@ -184,7 +184,8 @@ def album_art(song_id):
         image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
-    image = image.resize((250, 250), Image.ANTIALIAS)
+    image = image.resize((app.config['IMAGE_THUMB_SIZE'],
+        app.config['IMAGE_THUMB_SIZE']), Image.ANTIALIAS)
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
     image_data.seek(0)
