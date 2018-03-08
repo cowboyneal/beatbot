@@ -23,6 +23,16 @@ function updateProgress(elapsed, duration) {
 
 function updateUpNext(playlistInfo) {
     $('tr:has(td)').remove();
+
+    var onDeck = playlistInfo.shift();
+
+    $('#on-deck').append($('<tr/>')
+        .append($('<td/>').text(onDeck.title))
+        .append($('<td/>').text(onDeck.artist))
+        .append($('<td/>').text(onDeck.album))
+        .append($('<td/>').text(timeFormat(onDeck.time)))
+    );
+
     $.each(playlistInfo, function (index, song) {
         $('#playlist').append($('<tr/>')
             .append($('<td/>').text(song.title))

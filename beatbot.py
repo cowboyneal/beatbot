@@ -249,10 +249,13 @@ def refresh_playlistinfo():
 def queue_request(song_id):
     client = get_client()
 
-    next_pos = client.status()['nextsong']
-    client.moveid(song_id, next_pos)
-    next_pos = client.status()['nextsong']
-    client.moveid(song_id, next_pos)
+    for _ in range(2):
+        next_pos = int(client.status()['nextsong']) + 1
+
+        if next_pos == int(client.status()['playlistlength']):
+            next_pos = 0;
+
+        client.moveid(song_id, next_pos)
 
     close_client(client)
     return refresh_playlistinfo()
