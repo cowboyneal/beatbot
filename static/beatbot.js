@@ -26,12 +26,10 @@ function updateUpNext(playlistInfo) {
 
     var onDeck = playlistInfo.shift();
 
-    $('#on-deck').append($('<tr/>')
-        .append($('<td/>').text(onDeck.title))
-        .append($('<td/>').text(onDeck.artist))
-        .append($('<td/>').text(onDeck.album))
-        .append($('<td/>').text(timeFormat(onDeck.time)))
-    );
+    $('#on-deck-name').text(onDeck.title);
+    $('#on-deck-artist').text(onDeck.artist);
+    $('#on-deck-album').text(onDeck.album);
+    $('#on-deck-time').text(timeFormat(onDeck.time));
 
     $.each(playlistInfo, function (index, song) {
         $('#playlist').append($('<tr/>')

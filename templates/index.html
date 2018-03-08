@@ -126,20 +126,18 @@
     <div class="container border border-secondary">
       <div class="row">
         <div class="col p-3">
-          <div class="card">
+          <div class="card text-light">
             <div class="card-body">
-              <table id="on-deck" class="table table-sm table-striped table-hover mb-0">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Artist</th>
-                    <th scope="col">Album</th>
-                    <th scope="col">Length</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+              <dl class="row mb-0">
+                <dt class="col-sm-2 text-right">Name</dt>
+                <dd id="on-deck-name" class="col-sm-10"></dd>
+                <dt class="col-sm-2 text-right">Artist</dt>
+                <dd id="on-deck-artist" class="col-sm-10"></dd>
+                <dt class="col-sm-2 text-right">Album</dt>
+                <dd id="on-deck-album" class="col-sm-10"></dd>
+                <dt class="col-sm-2 text-right">Length</dt>
+                <dd id="on-deck-time" class="col-sm-10"></dd>
+              </dl>
             </div>
           </div>
         </div>
