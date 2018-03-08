@@ -1,4 +1,4 @@
-var timerFunction, currentSongId;
+var timerFunction, currentSongId, currentOnDeckId;
 var lastTimer = 0;
 
 function timeFormat(time) {
@@ -26,10 +26,16 @@ function updateUpNext(playlistInfo) {
 
     var onDeck = playlistInfo.shift();
 
+    if (onDeck.id != currentOnDeckId) {
+        $('#on-deck-thumb').attr('src', 'album_art/' +
+            onDeck.id + '/125');
+        currentOnDeckId = onDeck.id;
+    }
+
     $('#on-deck-name').text(onDeck.title);
     $('#on-deck-artist').text(onDeck.artist);
     $('#on-deck-album').text(onDeck.album);
-    $('#on-deck-time').text(timeFormat(onDeck.time));
+    $('#on-deck-year').text(onDeck.date);
 
     $.each(playlistInfo, function (index, song) {
         $('#playlist').append($('<tr/>')

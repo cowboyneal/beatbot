@@ -39,7 +39,6 @@ def rss():
 
 def clean_playlist(playlistinfo):
     keys = [
-        'date',
         'disc',
         'duration',
         'file',
@@ -83,6 +82,7 @@ def get_clean_status(client):
         'bitrate',
         'consume',
         'mixrampdb',
+        'mixrampdelay',
         'nextsong',
         'nextsongid',
         'playlist',
@@ -158,8 +158,12 @@ def get_image_type(image):
     return imghdr.what('', image)
 
 @app.route('/album_art/<int:song_id>')
+@app.route('/album_art/<int:song_id>/<int:size>')
 @nocache
-def album_art(song_id):
+def album_art(song_id, size = app.config['IMAGE_THUMB_SIZE']):
+    if size > 600:
+        size = 600
+
     client = get_client()
     file_name = client.playlistid(song_id)[0]['file']
     close_client(client)
@@ -183,8 +187,7 @@ def album_art(song_id):
         image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
-    image = image.resize((app.config['IMAGE_THUMB_SIZE'],
-        app.config['IMAGE_THUMB_SIZE']), Image.ANTIALIAS)
+    image = image.resize((size, size), Image.ANTIALIAS)
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
     image_data.seek(0)
