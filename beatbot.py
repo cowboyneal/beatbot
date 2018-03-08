@@ -23,7 +23,12 @@ def close_client(client):
 
 @app.route('/')
 def beatbot():
+    client = get_client()
+    stats = client.stats()
+    close_client(client)
+
     return render_template('index.html',
+            stats=stats,
             stream_url=app.config['STREAM_URL'],
             stream_text=app.config['STREAM_TEXT'])
 
