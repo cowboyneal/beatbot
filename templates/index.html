@@ -123,39 +123,47 @@
         </div>
       </div>
     </div>
-    <div class="container border border-secondary">
-      <div class="row py-3">
-        <div class="col-sm-auto">
-          <img id="on-deck-thumb"
-               class="img-thumbnail rounded"
-               src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA="
-               alt="Album art"
-          >
-        </div>
-        <div class="col pl-0">
-          <div class="card h-100">
-            <div class="card-body">
-                <h5 id="on-deck-name" class="card-title text-light"></h5>
-                <h6 id="on-deck-artist" class="card-subtitle mb-2"></h6>
-                <h6 class="card-title">
-                  <span id="on-deck-album" class="text-light"></span>
-                  <span id="on-deck-year"></span>
-                </h6>
+    <div class="container">
+      <div class="row">
+        <div class="col border border-secondary">
+          <div class="row py-3">
+            <div class="col-sm-auto">
+              <img id="on-deck-thumb"
+                   class="img-thumbnail rounded"
+                   src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA="
+                   alt="Album art"
+              >
+            </div>
+            <div class="col pl-0">
+              <div class="card h-100">
+                <div class="card-body">
+                    <h5 id="on-deck-name" class="card-title text-light"></h5>
+                    <h6 id="on-deck-artist" class="card-subtitle mb-2"></h6>
+                    <h6 class="card-title">
+                      <span id="on-deck-album" class="text-light"></span>
+                      <span id="on-deck-year"></span>
+                    </h6>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 pl-0">
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="card-title text-light mb-1">Stats</h6>
-              <dl class="row bm-0">
-                <dt class="col-6 text-right">Artists</dt>
-                <dd class="col-6 text-light mb-0">{{ stats['artists'] }}</dd>
-                <dt class="col-6 text-right">Albums</dt>
-                <dd class="col-6 text-light mb-0">{{ stats['albums'] }}</dd>
-                <dt class="col-6 text-right">Songs</dt>
-                <dd class="col-6 text-light mb-0">{{ stats['songs'] }}</dd>
-              </dl>
+        <div class="col-3 ml-3 border border-secondary">
+          <div class="row py-3">
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="card-title text-light">Stats</h6>
+                  <dl class="row mb-0">
+                    <dt class="col-6 text-right">Artists</dt>
+                    <dd class="col-6 text-light mb-0">{{ stats['artists'] }}</dd>
+                    <dt class="col-6 text-right">Albums</dt>
+                    <dd class="col-6 text-light mb-0">{{ stats['albums'] }}</dd>
+                    <dt class="col-6 text-right">Songs</dt>
+                    <dd class="col-6 text-light mb-0">{{ stats['songs'] }}</dd>
+                  </dl>
+                </div>
+              </div>
             </div>
           </div>
         </div>
