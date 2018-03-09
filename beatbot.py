@@ -64,18 +64,18 @@ def get_plinfo(client):
     status = client.status()
 
     list_start = int(current_song['pos']) + 1
+    list_length = app.config['COMING_UP_LENGTH'] + 1
     list_max = int(status['playlistlength'])
 
     if (list_start == list_max):
         list_start = 0
 
-    list_end = min(list_start + app.config['UP_NEXT_LENGTH'], list_max)
+    list_end = min(list_start + list_length, list_max)
     playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
     n = len(playlistinfo)
 
-    if (n < app.config['UP_NEXT_LENGTH']):
-        playlistinfo += client.playlistinfo('0:' +
-            str(app.config['UP_NEXT_LENGTH'] - n))
+    if (n < list_length):
+        playlistinfo += client.playlistinfo('0:' + str(list_length - n))
 
     return clean_playlist(playlistinfo)
 
