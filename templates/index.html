@@ -69,9 +69,13 @@
     </script>
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand mb-0 h1"><i class="fas fa-music"></i> Beatbot</span>
-      <span class="navbar-text">Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a></span>
       <span class="navbar-text">
-        <a href="nowplaying.rss" class="text-warning"><i class="fas fa-rss-square"></i></a>
+        Tune in at <a href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a>
+      </span>
+      <span class="navbar-text">
+        <a href="nowplaying.rss" class="text-warning">
+          <i class="fas fa-rss-square"></i>
+        </a>
       </span>
     </nav>
     <div class="container">
@@ -127,7 +131,9 @@
                         <p class="text-primary mb-0">
                           <span class="align-top">
                             <b>
-                              <span id="play-clock-elapsed">0:00</span>&nbsp;/&nbsp;<span id="play-clock-duration">0:00</span>
+                              <span id="play-clock-elapsed">0:00</span>
+                                /
+                              <span id="play-clock-duration">0:00</span>
                             </b>
                           </span>
                         </p>
@@ -180,11 +186,17 @@
                   <h6 class="card-title text-light">Stats</h6>
                   <dl class="row mb-0">
                     <dt class="col-6 text-right">Artists</dt>
-                    <dd class="col-6 text-light mb-0">{{ stats['artists'] }}</dd>
+                    <dd class="col-6 text-light mb-0">
+                      {{ stats['artists'] }}
+                    </dd>
                     <dt class="col-6 text-right">Albums</dt>
-                    <dd class="col-6 text-light mb-0">{{ stats['albums'] }}</dd>
+                    <dd class="col-6 text-light mb-0">
+                      {{ stats['albums'] }}
+                    </dd>
                     <dt class="col-6 text-right">Songs</dt>
-                    <dd class="col-6 text-light mb-0">{{ stats['songs'] }}</dd>
+                    <dd class="col-6 text-light mb-0">
+                      {{ stats['songs'] }}
+                    </dd>
                   </dl>
                 </div>
               </div>
@@ -313,7 +325,8 @@
                           </label>
                         </div>
                       </div>
-                      <select id="song-select" class="form-control" size="10" onchange="enableRequestSubmit();">
+                      <select id="song-select" class="form-control" size="10"
+                          onchange="enableRequestSubmit();">
                       </select>
                     </div>
                   </form>
