@@ -49,6 +49,13 @@
     .text-primary, .btn-outline-primary {
         color: #2a7fd6 !important;
     }
+    .badge-primary {
+        background-color: #2a7fd6;
+    }
+    .badge-pill {
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+    }
     </style>
   </head>
   <body>
@@ -102,7 +109,12 @@
                   <h5 id="np-artist" class="card-subtitle mb-2">Artist</h5>
                   <h5 class="card-title">
                     <span id="np-album" class="text-light">Album</span>
-                    <span id="np-year">Year</span>
+                  </h5>
+                  <h5 class="card-title mb-0">
+                    <span id="np-year-1" class="badge badge-pill"></span>
+                    <span id="np-year-2" class="badge badge-pill"></span>
+                    <span id="np-year-3" class="badge badge-pill"></span>
+                    <span id="np-year-4" class="badge badge-pill"></span>
                   </h5>
                 </div>
               </div>
@@ -171,7 +183,6 @@
                   <h6 id="on-deck-artist" class="card-subtitle mb-2"></h6>
                   <h6 class="card-title mb-0">
                     <span id="on-deck-album" class="text-light"></span>
-                    <span id="on-deck-year"></span>
                   </h6>
                 </div>
               </div>
@@ -224,7 +235,6 @@
                     <th scope="col">Name</th>
                     <th scope="col">Artist</th>
                     <th scope="col">Album</th>
-                    <th scope="col">Length</th>
                   </tr>
                 </thead>
                 <tbody>

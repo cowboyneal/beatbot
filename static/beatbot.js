@@ -35,16 +35,47 @@ function updateUpNext(playlistInfo) {
     $('#on-deck-name').text(onDeck.title);
     $('#on-deck-artist').text(onDeck.artist);
     $('#on-deck-album').text(onDeck.album);
-    $('#on-deck-year').text(onDeck.date);
 
     $.each(playlistInfo, function (index, song) {
         $('#playlist').append($('<tr/>')
             .append($('<td/>').text(song.title))
             .append($('<td/>').text(song.artist))
             .append($('<td/>').text(song.album))
-            .append($('<td/>').text(timeFormat(song.time)))
         );
     });
+}
+
+function setYear(songDate) {
+    for (var i = 1; i < 5; i++) {
+        var digit = songDate.substr(i - 1, 1);
+
+        $('#np-year-' + i).removeClass('badge-primary badge-success badge-danger badge-info');
+        $('#np-year-' + i).text(digit);
+
+        switch (parseInt(digit)) {
+            case 1:
+            case 2:
+            case 3:
+            case 9:
+                $('#np-year-' + i).addClass('badge-danger');
+                break;
+
+            case 4:
+            case 5:
+            case 6:
+                $('#np-year-' + i).addClass('badge-success');
+                break;
+
+            case 7:
+                $('#np-year-' + i).addClass('badge-info');
+                break;
+
+            case 8:
+            case 0:
+                $('#np-year-' + i).addClass('badge-primary');
+                break;
+        }
+    }
 }
 
 function fullRefresh() {
@@ -70,7 +101,7 @@ function fullRefresh() {
             $('#np-name').text(json.currentsong.title);
             $('#np-artist').text(json.currentsong.artist);
             $('#np-album').text(json.currentsong.album);
-            $('#np-year').text(json.currentsong.date);
+            setYear(json.currentsong.date);
 
             elapsed = Math.floor(json.status.elapsed);
             duration = Math.ceil(json.status.duration);
