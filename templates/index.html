@@ -121,13 +121,7 @@
             </div>
             <div class="mt-auto align-self-stretch">
               <div class="row">
-                <div class="col-sm-auto pr-2">
-                  <button type="button" class="btn btn-primary"
-                      data-toggle="modal" data-target="#search-modal">
-                    <i class="far fa-star"></i> Request A Song
-                  </button>
-                </div>
-                <div class="col p-2">
+                <div class="col py-2 pr-2">
                   <div class="progress">
                     <div id="play-progress" class="progress-bar"
                         role="progressbar" style="width: 0%"
@@ -194,21 +188,17 @@
             <div class="col">
               <div class="card h-100">
                 <div class="card-body">
-                  <h6 class="card-title text-light">Stats</h6>
-                  <dl class="row mb-0">
-                    <dt class="col-6 text-right">Artists</dt>
-                    <dd class="col-6 text-light mb-0">
-                      {{ stats['artists'] }}
-                    </dd>
-                    <dt class="col-6 text-right">Albums</dt>
-                    <dd class="col-6 text-light mb-0">
-                      {{ stats['albums'] }}
-                    </dd>
-                    <dt class="col-6 text-right">Songs</dt>
-                    <dd class="col-6 text-light mb-0">
-                      {{ stats['songs'] }}
-                    </dd>
-                  </dl>
+                  <p class="card-text">
+                    There are currently
+                    <span class="text-light">{{ stats['songs'] }}</span>
+                    songs to choose from in the database.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary"
+                        data-toggle="modal" data-target="#search-modal">
+                      <i class="far fa-star"></i> Request A Song
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
