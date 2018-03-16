@@ -29,6 +29,7 @@ def beatbot():
 
     return render_template('index.html',
             stats=stats,
+            background=app.config['BACKGROUND_IMAGE'],
             stream_url=app.config['STREAM_URL'],
             stream_text=app.config['STREAM_TEXT'])
 

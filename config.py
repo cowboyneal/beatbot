@@ -1,4 +1,5 @@
 SONG_FILE_DIRECTORY = '/Users/pater/Music/mpd'
+BACKGROUND_IMAGE    = 'background.jpg'
 PLACEHOLDER_IMAGE   = 'notfound.jpg'
 MPD_ADDRESS         = 'localhost'
 MPD_PORT            = 6600
