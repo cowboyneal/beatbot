@@ -152,6 +152,12 @@ function fullRefresh() {
     });
 }
 
+function checkSearchKey(e) {
+    if (e.keyCode == 13) {
+        searchSongs();
+    }
+}
+
 function searchSongs() {
     var match = $('#search-term').val();
 

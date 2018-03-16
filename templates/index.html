@@ -183,13 +183,13 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 ml-3 border border-secondary rounded">
+        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 ml-3 border border-secondary rounded">
           <div class="row py-3 h-100">
             <div class="col">
               <div class="card h-100">
                 <div class="card-body">
                   <p class="card-text">
-                    There are currently
+                    <i class="fas fa-info-circle"></i> There are currently
                     <span class="text-light">{{ stats['songs'] }}</span>
                     songs to choose from in the database.
                   </p>
@@ -298,11 +298,12 @@
                 <div class="col">
                   <div class="input-group mb-3">
                     <input type="text" class="form-control" id="search-term"
-                        placeholder="Find a song" aria-label="Text to match">
+                        placeholder="Find a song" aria-label="Text to match"
+                        onkeypress="checkSearchKey(event);">
                     <div class="input-group-append">
                       <button class="btn btn-outline-primary" type="button"
                           onclick="searchSongs();">
-                        Search
+                        <i class="fas fa-search"></i> Search
                       </button>
                     </div>
                   </div>
