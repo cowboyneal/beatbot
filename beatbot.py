@@ -3,6 +3,7 @@ import io
 import imghdr
 
 from flask     import Flask, render_template, jsonify, send_file, make_response
+from flask     import send_from_directory
 from musicpd   import MPDClient
 from mutagen   import File
 from PIL       import Image
@@ -20,6 +21,10 @@ def get_client():
 def close_client(client):
     client.close()
     client.disconnect()
+
+@app.route('/.well-known/acme-challenge/<string:file_name>')
+def acme_challenge(file_name):
+    return send_from_directory('static', file_name)
 
 @app.route('/')
 def beatbot():
