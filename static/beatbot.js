@@ -178,6 +178,10 @@ function searchSongs() {
                 return;
             }
 
+            var disOption = new Option('Select a song', '', true, true);
+            disOption.hidden= true;
+            $('#song-select').append(disOption);
+
             $.each(json.results, function(index, song) {
                 $('#song-select').append(new Option(song.title + ' - ' + song.artist, song.id));
             });
