@@ -3,7 +3,7 @@ import io
 import imghdr
 
 from flask     import Flask, render_template, jsonify, send_file, \
-                      make_response, send_from_directory
+                      make_response, send_from_directory, request
 from flask.ext.mobility            import Mobility
 from flask.ext.mobility.decorators import mobile_template
 from musicpd   import MPDClient
@@ -173,11 +173,19 @@ def get_image_type(image):
     return imghdr.what('', image)
 
 @app.route('/album_art/<int:song_id>')
-@app.route('/album_art/<int:song_id>/<int:size>')
+@app.route('/album_art/<int:song_id>/<int:is_small>')
 @nocache
-def album_art(song_id, size = app.config['IMAGE_THUMB_SIZE']):
-    if size > 600:
-        size = 600
+def album_art(song_id, is_small = 0):
+    if request.MOBILE:
+        if is_small:
+            size = app.config['MOBILE_THUMB_SIZE_SM']
+        else:
+            size = app.config['MOBILE_THUMB_SIZE']
+    else:
+        if is_small:
+            size = app.config['IMAGE_THUMB_SIZE_SM']
+        else:
+            size = app.config['IMAGE_THUMB_SIZE']
 
     client = get_client()
     file_name = client.playlistid(song_id)[0]['file']
