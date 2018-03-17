@@ -4,12 +4,15 @@ import imghdr
 
 from flask     import Flask, render_template, jsonify, send_file, \
                       make_response, send_from_directory
+from flask.ext.mobility            import Mobility
+from flask.ext.mobility.decorators import mobile_template
 from musicpd   import MPDClient
 from mutagen   import File
 from PIL       import Image
 from functools import wraps, update_wrapper
 from datetime  import datetime
 app = Flask(__name__)
+Mobility(app)
 app.config.from_object('config')
 
 def get_client():
@@ -27,12 +30,13 @@ def acme_challenge(file_name):
     return send_from_directory('static', file_name)
 
 @app.route('/')
-def beatbot():
+@mobile_template('index{_mobile}.html')
+def beatbot(template):
     client = get_client()
     stats = client.stats()
     close_client(client)
 
-    return render_template('index.html',
+    return render_template(template,
             stats=stats,
             background=app.config['BACKGROUND_IMAGE'],
             stream_url=app.config['STREAM_URL'],
