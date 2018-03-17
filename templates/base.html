@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <link rel="shortcut icon"
         href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cyborg/bootstrap.min.css"
@@ -19,6 +19,9 @@
         background-size: cover;
 
         font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+    body, .navbar-default {
+        max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
         font-weight: bold;
