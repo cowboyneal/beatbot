@@ -1,0 +1,16 @@
+#!/usr//bin/env python3
+from flask   import Flask
+from musicpd import MPDClient
+app = Flask(__name__)
+app.config.from_object('config')
+
+client = MPDClient()
+client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
+
+status = client.status()
+
+if int(status['song']) == (int(status['playlistlength']) - 1):
+    client.shuffle()
+
+client.close()
+client.disconnect()
