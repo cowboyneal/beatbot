@@ -188,11 +188,14 @@
             <div class="col">
               <div class="card h-100">
                 <div class="card-body">
-                  <p class="card-text">
-                    <i class="fas fa-info-circle"></i> There are currently
-                    <span class="text-light">{{ stats['songs'] }}</span>
-                    songs to choose from in the database.
-                  </p>
+                  <dl class="row card-text mb-0">
+                    <dt class="col-1"><i class="fas fa-info-circle"></i></dt>
+                    <dd class="col">
+                      There are currently
+                      <span class="text-light">{{ stats['songs'] }}</span>
+                      songs to choose from in the database.
+                    </dd>
+                  </dl>
                   <div class="d-flex justify-content-center">
                     <button id="request-button" type="button"
                         class="btn btn-primary" data-toggle="modal"
