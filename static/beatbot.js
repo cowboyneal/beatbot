@@ -222,6 +222,10 @@ function submitRequest() {
 }
 
 $(function () {
+    $('#search-modal').on('shown.bs.modal', function() {
+        $('#search-term').focus();
+    })
+
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
             if (Date.now() - lastTimer > 100) {

@@ -248,8 +248,9 @@ def search(match):
     return jsonify(data)
 
 @app.route('/playlistinfo')
-def refresh_playlistinfo():
-    client = get_client()
+def refresh_playlistinfo(client = None):
+    if client is None:
+        client = get_client()
 
     data = {
         'playlistinfo': get_plinfo(client),
@@ -271,5 +272,4 @@ def queue_request(song_id):
 
         client.moveid(song_id, next_pos)
 
-    close_client(client)
-    return refresh_playlistinfo()
+    return refresh_playlistinfo(client)
