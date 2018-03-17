@@ -2,8 +2,8 @@ import os
 import io
 import imghdr
 
-from flask     import Flask, render_template, jsonify, send_file, make_response
-from flask     import send_from_directory
+from flask     import Flask, render_template, jsonify, send_file, \
+                      make_response, send_from_directory
 from musicpd   import MPDClient
 from mutagen   import File
 from PIL       import Image
