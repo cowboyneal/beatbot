@@ -187,6 +187,9 @@ function searchSongs() {
             });
         },
         error: function(xhr, status) {
+            if (xhr.status == 404) {
+                $('#search-error').show();
+            }
         }
     });
 }
