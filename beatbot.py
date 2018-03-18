@@ -15,19 +15,17 @@ app = Flask(__name__)
 Mobility(app)
 app.config.from_object('config')
 
-def get_client():
-    client = MPDClient()
-    client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
 
-    return client
-
-def close_client(client):
-    client.close()
-    client.disconnect()
-
-@app.route('/.well-known/acme-challenge/<string:file_name>')
-def acme_challenge(file_name):
-    return send_from_directory('static', file_name)
+    return update_wrapper(no_cache, view)
 
 @app.route('/')
 @mobile_template('index{_mobile}.html')
@@ -52,72 +50,9 @@ def rss():
             title=current_song['title'],
             artist=current_song['artist'])
 
-def clean_playlist(playlistinfo):
-    keys = [
-        'disc',
-        'duration',
-        'file',
-        'genre',
-        'last-modified',
-        'track'
-    ]
-
-    for song in playlistinfo:
-        for k in keys:
-            if k in song:
-                del song[k]
-
-    return playlistinfo
-
-def get_plinfo(client):
-    current_song = client.currentsong()
-    status = client.status()
-
-    list_start = int(current_song['pos']) + 1
-    list_length = app.config['COMING_UP_LENGTH'] + 1
-    list_max = int(status['playlistlength'])
-
-    if (list_start == list_max):
-        list_start = 0
-
-    list_end = min(list_start + list_length, list_max)
-    playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
-    n = len(playlistinfo)
-
-    if (n < list_length):
-        playlistinfo += client.playlistinfo('0:' + str(list_length - n))
-
-    return clean_playlist(playlistinfo)
-
-def get_clean_status(client):
-    status = client.status()
-
-    keys = [
-        'audio',
-        'bitrate',
-        'consume',
-        'mixrampdb',
-        'mixrampdelay',
-        'nextsong',
-        'nextsongid',
-        'playlist',
-        'playlistlength',
-        'random',
-        'repeat',
-        'single',
-        'song',
-        'songid',
-        'state',
-        'time',
-        'volume',
-        'xfade'
-    ]
-
-    for k in keys:
-        if k in status:
-            del status[k]
-
-    return status
+@app.route('/.well-known/acme-challenge/<string:file_name>')
+def acme_challenge(file_name):
+    return send_from_directory('static', file_name)
 
 @app.route('/now_playing')
 def now_playing():
@@ -149,28 +84,18 @@ def now_playing():
 
     return jsonify(data)
 
-def nocache(view):
-    @wraps(view)
-    def no_cache(*args, **kwargs):
-        response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = datetime.now()
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-        return response
-        
-    return update_wrapper(no_cache, view)
+@app.route('/playlistinfo')
+def refresh_playlistinfo(client = None):
+    if client is None:
+        client = get_client()
 
-def get_placeholder_image():
-    image_file = open(os.path.join(app.root_path,
-        'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
-    image = image_file.read()
-    image_file.close()
+    data = {
+        'playlistinfo': get_plinfo(client),
+        'status'      : get_clean_status(client)
+    }
 
-    return image
-
-def get_image_type(image):
-    return imghdr.what('', image)
+    close_client(client)
+    return jsonify(data)
 
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:song_id>/<int:is_small>')
@@ -259,19 +184,6 @@ def search(match):
 
     return jsonify(data)
 
-@app.route('/playlistinfo')
-def refresh_playlistinfo(client = None):
-    if client is None:
-        client = get_client()
-
-    data = {
-        'playlistinfo': get_plinfo(client),
-        'status'      : get_clean_status(client)
-    }
-
-    close_client(client)
-    return jsonify(data)
-
 @app.route('/queue_request/<int:song_id>')
 def queue_request(song_id):
     client = get_client()
@@ -285,3 +197,91 @@ def queue_request(song_id):
         client.moveid(song_id, next_pos)
 
     return refresh_playlistinfo(client)
+
+def get_client():
+    client = MPDClient()
+    client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
+
+    return client
+
+def close_client(client):
+    client.close()
+    client.disconnect()
+
+def clean_playlist(playlistinfo):
+    keys = [
+        'disc',
+        'duration',
+        'file',
+        'genre',
+        'last-modified',
+        'track'
+    ]
+
+    for song in playlistinfo:
+        for k in keys:
+            if k in song:
+                del song[k]
+
+    return playlistinfo
+
+def get_plinfo(client):
+    current_song = client.currentsong()
+    status = client.status()
+
+    list_start = int(current_song['pos']) + 1
+    list_length = app.config['COMING_UP_LENGTH'] + 1
+    list_max = int(status['playlistlength'])
+
+    if (list_start == list_max):
+        list_start = 0
+
+    list_end = min(list_start + list_length, list_max)
+    playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
+    n = len(playlistinfo)
+
+    if (n < list_length):
+        playlistinfo += client.playlistinfo('0:' + str(list_length - n))
+
+    return clean_playlist(playlistinfo)
+
+def get_clean_status(client):
+    status = client.status()
+
+    keys = [
+        'audio',
+        'bitrate',
+        'consume',
+        'mixrampdb',
+        'mixrampdelay',
+        'nextsong',
+        'nextsongid',
+        'playlist',
+        'playlistlength',
+        'random',
+        'repeat',
+        'single',
+        'song',
+        'songid',
+        'state',
+        'time',
+        'volume',
+        'xfade'
+    ]
+
+    for k in keys:
+        if k in status:
+            del status[k]
+
+    return status
+
+def get_placeholder_image():
+    image_file = open(os.path.join(app.root_path,
+        'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
+    image = image_file.read()
+    image_file.close()
+
+    return image
+
+def get_image_type(image):
+    return imghdr.what('', image)
