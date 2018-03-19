@@ -21,9 +21,9 @@ with app.app_context():
             if message[0] == 'playlist':
                 delta = datetime.now() - last_pl_update
                 if delta.total_seconds() > 2:
-                    sse.publish({'message': message[0]})
+                    sse.publish({ 'message': message[0] })
                     last_pl_update = datetime.now()
             else:
-                sse.publish({'message': message[0]})
+                sse.publish({ 'message': message[0] })
         except KeyboardInterrupt:
             sys.exit()
