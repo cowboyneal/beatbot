@@ -1,0 +1,29 @@
+#!/usr/local/bin/python3
+import sys
+from flask import Flask
+from flask_sse import sse
+from musicpd import MPDClient
+from datetime import datetime, timedelta
+sys.path.insert(0, '/usr/local/var/www/beatbot')
+app = Flask(__name__)
+with app.app_context():
+    app.config.from_object('config')
+    app.register_blueprint(sse, url_prefix='/stream')
+ 
+    client = MPDClient()
+    client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
+
+    last_pl_update = datetime.now()
+
+    while True:
+        try:
+            message = client.idle('player', 'playlist')
+            if message[0] == 'playlist':
+                delta = datetime.now() - last_pl_update
+                if delta.total_seconds() > 2:
+                    sse.publish({'message': message[0]})
+                    last_pl_update = datetime.now()
+            else:
+                sse.publish({'message': message[0]})
+        except KeyboardInterrupt:
+            sys.exit()
