@@ -1,5 +1,5 @@
-var timerFunction, currentSongId, currentOnDeckId;
-var lastTimer = 0;
+var elapsed = 0, duration = 0;
+var currentSongId, currentOnDeckId;
 
 function timeFormat(time) {
     var minutes = Math.trunc(time / 60);
@@ -79,10 +79,6 @@ function setYear(songDate) {
 }
 
 function fullRefresh() {
-    var elapsed, duration;
-    var timer = 0;
-    var timeout = Math.trunc(Math.random() * 31) + 60;
-
     $.ajax({
         url: 'now_playing',
         type: 'GET',
@@ -108,44 +104,6 @@ function fullRefresh() {
             updateProgress(elapsed, duration);
 
             updateUpNext(json.playlistinfo);
-
-            timerFunction = setInterval(function() {
-                timer++;
-
-                if (timer >= timeout &&
-                        (duration - elapsed) > 2) {
-                    $.ajax({
-                        url: 'playlistinfo',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(json) {
-                            elapsed = Math.floor(json.status.elapsed);
-                            duration = Math.ceil(json.status.duration);
-                            updateProgress(elapsed, duration);
-                            updateUpNext(json.playlistinfo);
-                        },
-                        error: function(xhr, status) {
-                        }
-                    });
-
-                    timer = 0;
-                    return;
-                }
-
-                elapsed++;
-
-                if (elapsed > duration) {
-                    elapsed = duration;
-                }
-
-                updateProgress(elapsed, duration);
-
-                if (elapsed >= duration) {
-                    clearInterval(timerFunction);
-                    timerFunction = false;
-                    fullRefresh();
-                }
-            }, 1000);
         },
         error: function(xhr, status) {
         }
@@ -179,11 +137,12 @@ function searchSongs() {
             }
 
             var disOption = new Option('Select a song', '', true, true);
-            disOption.hidden= true;
+            disOption.hidden = true;
             $('#song-select').append(disOption);
 
             $.each(json.results, function(index, song) {
-                $('#song-select').append(new Option(song.title + ' - ' + song.artist, song.id));
+                $('#song-select').append(new Option(song.title + ' - ' +
+                    song.artist, song.id));
             });
         },
         error: function(xhr, status) {
@@ -195,8 +154,6 @@ function searchSongs() {
 }
 
 function enableRequestSubmit() {
-    // var selection = $('#song-select option:selected').text();
-    // $('#queue-button').html('Request Song');
     $('#queue-button').prop('disabled', false);
 }
 
@@ -221,7 +178,6 @@ function submitRequest() {
         type: 'GET',
         dataType: 'json',
         success: function(json) {
-            updateUpNext(json.playlistinfo);
         },
         error: function(xhr, status) {
         }
@@ -234,18 +190,55 @@ $(function () {
     })
 
     document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            if (Date.now() - lastTimer > 100) {
-                clearInterval(timerFunction);
-                timerFunction = false;
-            }
-        } else {
-            if (!timerFunction) {
-                lastTimer = Date.now();
-                fullRefresh();
-            }
+        if (!document.hidden) {
+            fullRefresh();
         }
     });
 
+    var source = new EventSource('/stream');
+    source.onmessage = function(event) {
+        var message = JSON.parse(event.data).message;
+
+        if (message == 'player') {
+            fullRefresh();
+            return;
+        }
+
+        if (message == 'playlist') {
+            $.ajax({
+                url: 'playlistinfo',
+                type: 'GET',
+                dataType: 'json',
+                success: function(json) {
+                    elapsed = Math.floor(json.status.elapsed);
+                    duration = Math.ceil(json.status.duration);
+                    updateProgress(elapsed, duration);
+                    updateUpNext(json.playlistinfo);
+                },
+                error: function(xhr, status) {
+                }
+            });
+
+            return;
+        }
+    };
+    source.onerror = function(event) {
+        $('#disco-alert').show();
+    };
+
     fullRefresh();
+
+    timerFunction = setInterval(function() {
+        if (!elapsed && !duration) {
+            return;
+        }
+
+        elapsed++;
+
+        if (elapsed > duration) {
+            elapsed = duration;
+        }
+
+        updateProgress(elapsed, duration);
+    }, 1000);
 });

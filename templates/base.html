@@ -59,6 +59,9 @@
         padding-right: 0.5em;
         padding-left: 0.5em;
     }
+    .alert-danger {
+        background-image: linear-gradient(var(--danger), #990000);
+    }
     </style>
   </head>
   <body>
@@ -87,6 +90,17 @@
 {%- block nav_rss %}
 {% endblock %}
     </nav>
+    <div id="disco-alert" class="container pt-3" style="display:none;">
+      <div class="row">
+        <div class="col">
+          <div class="alert alert-danger" role="alert">
+            Beatbot has lost its connection to the server. Please
+            <a href='.' class="alert-link"><i class="fas fa-redo"></i> reload the page</a>
+            to resume normal operations.
+          </div>
+        </div>
+      </div>
+    </div>
 {%- block content %}
 {% endblock -%}
 {%- block modal %}

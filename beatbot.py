@@ -6,6 +6,7 @@ from flask import Flask, render_template, jsonify, send_file, make_response, \
         send_from_directory, request
 from flask_mobility import Mobility
 from flask_mobility.decorators import mobile_template
+from flask_sse import sse
 from musicpd import MPDClient
 from mutagen import File
 from PIL import Image
@@ -14,6 +15,7 @@ from datetime import datetime
 app = Flask(__name__)
 Mobility(app)
 app.config.from_object('config')
+app.register_blueprint(sse, url_prefix='/stream')
 
 def nocache(view):
     @wraps(view)
@@ -85,9 +87,8 @@ def now_playing():
     return jsonify(data)
 
 @app.route('/playlistinfo')
-def refresh_playlistinfo(client = None):
-    if client is None:
-        client = get_client()
+def refresh_playlistinfo():
+    client = get_client()
 
     data = {
         'playlistinfo': get_plinfo(client),
@@ -196,7 +197,7 @@ def queue_request(song_id):
 
         client.moveid(song_id, next_pos)
 
-    return refresh_playlistinfo(client)
+    return jsonify({ 'success': 1 })
 
 def get_client():
     client = MPDClient()
