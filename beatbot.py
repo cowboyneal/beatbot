@@ -189,6 +189,10 @@ def search(match):
 def queue_request(song_id):
     client = get_client()
 
+    if (song_id == int(client.currentsong()['id']) or
+            song_id == int(client.status()['nextsongid'])):
+        return jsonify({ 'success': 0 })
+
     for _ in range(2):
         next_pos = int(client.status()['nextsong']) + 1
 
