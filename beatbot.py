@@ -251,7 +251,10 @@ def get_plinfo(client):
     return clean_playlist(playlistinfo)
 
 def get_clean_status(client):
-    status = client.status()
+    while True:
+        status = client.status()
+        if status['elapsed'] != '0.000':
+            break
 
     keys = [
         'audio',
