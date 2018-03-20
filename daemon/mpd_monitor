@@ -13,13 +13,13 @@ class PongClient (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
     def run(self):
-        while True:
-            try:
-                time.sleep(540);
-                sse.publish({ 'message': 'pong' })
-            except KeyboardInterrupt:
-                break
-
+        with app.app_context():
+            while True:
+                try:
+                    time.sleep(540);
+                    sse.publish({ 'message': 'pong' })
+                except KeyboardInterrupt:
+                    sys.exit()
 
 with app.app_context():
     app.config.from_object('config')
