@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+import os
 import sys
 import threading
 import time
@@ -15,11 +16,8 @@ class PongClient (threading.Thread):
     def run(self):
         with app.app_context():
             while True:
-                try:
-                    time.sleep(540);
-                    sse.publish({ 'message': 'pong' })
-                except KeyboardInterrupt:
-                    sys.exit()
+                time.sleep(540)
+                sse.publish({ 'message': 'pong' })
 
 with app.app_context():
     app.config.from_object('config')
@@ -44,4 +42,4 @@ with app.app_context():
             else:
                 sse.publish({ 'message': message[0] })
         except KeyboardInterrupt:
-            sys.exit()
+            os._exit(0)
