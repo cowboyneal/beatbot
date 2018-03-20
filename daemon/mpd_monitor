@@ -1,11 +1,26 @@
 #!/usr/local/bin/python3
 import sys
+import threading
+import time
 from flask import Flask
 from flask_sse import sse
 from musicpd import MPDClient
 from datetime import datetime, timedelta
 sys.path.insert(0, '/usr/local/var/www/beatbot')
 app = Flask(__name__)
+
+class PongClient (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        while True:
+            try:
+                time.sleep(540);
+                sse.publish({ 'message': 'pong' })
+            except KeyboardInterrupt:
+                break
+
+
 with app.app_context():
     app.config.from_object('config')
     app.register_blueprint(sse, url_prefix='/status')
@@ -14,6 +29,9 @@ with app.app_context():
     client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
 
     last_pl_update = datetime.now()
+
+    ponger = PongClient()
+    ponger.start()
 
     while True:
         try:
