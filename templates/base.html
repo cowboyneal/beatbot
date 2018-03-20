@@ -80,6 +80,9 @@
     </script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js">
     </script>
+    <script>
+      var statusUrl = "{{ url_for('sse.stream') }}";
+    </script>
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand mb-0 h1">
         <i class="fas fa-music"></i> Beatbot
@@ -94,9 +97,14 @@
       <div class="row">
         <div class="col">
           <div class="alert alert-danger" role="alert">
-            Beatbot has lost its connection to the server. Please
-            <a href="." class="alert-link"><i class="fas fa-redo"></i>&nbsp;reload the page</a>
-            to resume normal operations.
+            <dl class="row mb-0">
+              <dt class="col-1"><a href="." class="alert-link"><i class="fas fa-redo"></i></a></dt>
+              <dd class="col pl-2">
+                Beatbot has lost its connection to the server. Please
+                <a href="." class="alert-link">reload the page</a>
+                to resume normal operations.
+              </dd>
+            </dl>
           </div>
         </div>
       </div>

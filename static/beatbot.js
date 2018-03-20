@@ -195,7 +195,7 @@ $(function () {
         }
     });
 
-    var source = new EventSource('/stream');
+    var source = new EventSource(statusUrl);
     source.onmessage = function(event) {
         var message = JSON.parse(event.data).message;
 

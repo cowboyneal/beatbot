@@ -15,7 +15,7 @@ from datetime import datetime
 app = Flask(__name__)
 Mobility(app)
 app.config.from_object('config')
-app.register_blueprint(sse, url_prefix='/stream')
+app.register_blueprint(sse, url_prefix='/status')
 
 def nocache(view):
     @wraps(view)

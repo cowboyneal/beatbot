@@ -8,7 +8,7 @@ sys.path.insert(0, '/usr/local/var/www/beatbot')
 app = Flask(__name__)
 with app.app_context():
     app.config.from_object('config')
-    app.register_blueprint(sse, url_prefix='/stream')
+    app.register_blueprint(sse, url_prefix='/status')
  
     client = MPDClient()
     client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
