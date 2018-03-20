@@ -218,7 +218,6 @@ $(function () {
                 error: function(xhr, status) {
                 }
             });
-
             return;
         }
     };
