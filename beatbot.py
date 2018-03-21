@@ -1,6 +1,7 @@
 import os
 import io
 import imghdr
+import time
 
 from flask import Flask, render_template, jsonify, send_file, make_response, \
         send_from_directory, request
@@ -255,6 +256,7 @@ def get_clean_status(client):
         status = client.status()
         if status['elapsed'] != '0.000':
             break
+        time.sleep(100/1000.0)
 
     keys = [
         'audio',
