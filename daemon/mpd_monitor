@@ -24,9 +24,10 @@ class PlaylistShuffler (threading.Thread):
         threading.Thread.__init__(self)
     def run(self):
         with app.app_context():
+            shuffle_client = MPDClient()
+
             while True:
                 time.sleep(60)
-                shuffle_client = MPDClient()
                 shuffle_client.connect(app.config['MPD_ADDRESS'],
                         app.config['MPD_PORT'])
                 status = shuffle_client.status()
