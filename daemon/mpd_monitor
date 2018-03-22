@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 sys.path.insert(0, '/usr/local/var/www/beatbot')
 app = Flask(__name__)
 
-
 class ConnectionDoctor (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
