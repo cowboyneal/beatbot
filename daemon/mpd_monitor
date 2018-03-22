@@ -10,7 +10,8 @@ from datetime import datetime, timedelta
 sys.path.insert(0, '/usr/local/var/www/beatbot')
 app = Flask(__name__)
 
-class PongClient (threading.Thread):
+
+class ConnectionDoctor (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
     def run(self):
@@ -18,6 +19,22 @@ class PongClient (threading.Thread):
             while True:
                 time.sleep(540)
                 sse.publish({ 'message': 'pong' })
+
+class PlaylistShuffler (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        with app.app_context():
+            while True:
+                time.sleep(60)
+                shuffle_client = MPDClient()
+                shuffle_client.connect(app.config['MPD_ADDRESS'],
+                        app.config['MPD_PORT'])
+                status = shuffle_client.status()
+                if int(status['song']) == (int(status['playlistlength']) - 1):
+                    shuffle_client.shuffle();
+                shuffle_client.close()
+                shuffle_client.disconnect()
 
 with app.app_context():
     app.config.from_object('config')
@@ -28,8 +45,11 @@ with app.app_context():
 
     last_pl_update = datetime.now()
 
-    ponger = PongClient()
+    ponger = ConnectionDoctor()
     ponger.start()
+
+    shuffler = PlaylistShuffler()
+    shuffler.start()
 
     while True:
         try:
