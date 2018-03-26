@@ -27,8 +27,7 @@ function updateUpNext(playlistInfo) {
     var onDeck = playlistInfo.shift();
 
     if (onDeck.id != currentOnDeckId) {
-        $('#on-deck-thumb').attr('src', 'album_art/' +
-            onDeck.id + '/1');
+        $('#on-deck-thumb').attr('src', 'album_art/1/' + onDeck.id);
         currentOnDeckId = onDeck.id;
     }
 

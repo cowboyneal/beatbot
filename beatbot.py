@@ -100,7 +100,7 @@ def refresh_playlistinfo():
     return jsonify(data)
 
 @app.route('/album_art/<int:song_id>')
-@app.route('/album_art/<int:song_id>/<int:is_small>')
+@app.route('/album_art/<int:is_small>/<int:song_id>')
 @nocache
 def album_art(song_id, is_small = 0):
     if request.MOBILE:
