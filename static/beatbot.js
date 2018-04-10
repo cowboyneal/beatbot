@@ -13,7 +13,12 @@ function volumeDown() {
     oldVolume = volume;
     volume -= 5;
     audio.volume = volume/100;
-    $('#mute-button').text(volume);
+
+    if (volume == 0) {
+        $('#mute-button').html('<i class="fas fa-volume-off"></i>');
+    } else {
+        $('#mute-button').text(volume);
+    }
 }
 
 function volumeUp() {
@@ -33,7 +38,7 @@ function volumeMute() {
         oldVolume = volume;
         volume = 0;
         audio.volume = 0.0;
-        $('#mute-button').text(volume);
+        $('#mute-button').html('<i class="fas fa-volume-off"></i>');
         isMuted = true;
     } else {
         volume = oldVolume;
