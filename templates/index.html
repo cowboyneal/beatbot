@@ -57,13 +57,17 @@
                     </div>
                     <div class="btn-group" role="group"
                         aria-label="Volume controls">
-                      <button type="button" class="btn btn-outline-primary">
+                      <button type="button" class="btn btn-outline-primary"
+                        onclick="volumeDown();">
                         <i class="fas fa-caret-down"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-primary">
-                        100%
+                      <button id="mute-button" type="button"
+                          class="btn btn-outline-primary"
+                          onclick="volumeMute();">
+                        100
                       </button>
-                      <button type="button" class="btn btn-outline-primary">
+                      <button type="button" class="btn btn-outline-primary"
+                        onclick="volumeUp();">
                         <i class="fas fa-caret-up"></i>
                       </button>
                     </div>

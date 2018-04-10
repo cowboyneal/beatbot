@@ -1,9 +1,47 @@
 var elapsed = 0, duration = 0;
 var currentSongId, currentOnDeckId;
 
-var isPlaying = false;
+var isPlaying = false, volume = 100, oldVolume, isMuted = false;
 var sourceUrl = $('source').attr('src');
 var audio = document.querySelector('audio');
+
+function volumeDown() {
+    if (volume == 0) {
+        return;
+    }
+
+    oldVolume = volume;
+    volume -= 5;
+    audio.volume = volume/100;
+    $('#mute-button').text(volume);
+}
+
+function volumeUp() {
+    if (volume == 100) {
+        return;
+    }
+
+    oldVolume = volume;
+    volume += 5;
+    audio.volume = volume/100;
+    $('#mute-button').text(volume);
+    isMuted = false;
+}
+
+function volumeMute() {
+    if (!isMuted) {
+        oldVolume = volume;
+        volume = 0;
+        audio.volume = 0.0;
+        $('#mute-button').text(volume);
+        isMuted = true;
+    } else {
+        volume = oldVolume;
+        audio.volume = volume/100;
+        $('#mute-button').text(volume);
+        isMuted = false;
+    }
+}
 
 function playPause() {
     if (isPlaying) {
