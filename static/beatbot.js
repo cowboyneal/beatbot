@@ -1,6 +1,30 @@
 var elapsed = 0, duration = 0;
 var currentSongId, currentOnDeckId;
 
+var isPlaying = false;
+var sourceUrl = $('source').attr('src');
+var audio = document.querySelector('audio');
+
+function playPause() {
+    if (isPlaying) {
+        $('source').attr('src', '');
+        audio.pause();
+        setTimeout(function () {
+            audio.load();
+        });
+        isPlaying = false;
+        $('#play-button').html('<i class="fas fa-play"></i>');
+    } else {
+        if (!$('source').attr('src')) {
+            $('source').attr('src', sourceUrl);
+            audio.load();
+        }
+        audio.play();
+        isPlaying = true;
+        $('#play-button').html('<i class="fas fa-stop"></i>');
+    }
+}
+
 function timeFormat(time) {
     var minutes = Math.trunc(time / 60);
     var seconds = Math.trunc(time % 60);
