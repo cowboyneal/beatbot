@@ -84,14 +84,11 @@
       var statusUrl = "{{ url_for('sse.stream') }}";
     </script>
     <audio>
-        <source src="http://beatbot.cowboyneal.org:8000/" type="audio/mpeg">
+      <source src="{{ stream_url }}" type="audio/mpeg">
     </audio>
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand mb-0 h1">
         <i class="fas fa-music"></i> Beatbot
-      </span>
-      <span class="navbar-text">
-        Tune in at <a target="_blank" href="{{ stream_url }}"><i class="fas fa-podcast"></i> {{ stream_text }}</a>
       </span>
 {%- block nav_rss %}
 {% endblock %}

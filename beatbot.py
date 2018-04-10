@@ -40,8 +40,7 @@ def beatbot(template):
     return render_template(template,
             stats=stats,
             background=app.config['BACKGROUND_IMAGE'],
-            stream_url=app.config['STREAM_URL'],
-            stream_text=app.config['STREAM_TEXT'])
+            stream_url=app.config['STREAM_URL'])
 
 @app.route('/nowplaying.rss')
 def rss():
