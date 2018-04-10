@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 import os
 import sys
 import threading
@@ -7,7 +7,7 @@ from flask import Flask
 from flask_sse import sse
 from musicpd import MPDClient
 from datetime import datetime, timedelta
-sys.path.insert(0, '/usr/local/var/www/beatbot')
+sys.path.insert(0, '/var/www/beatbot')
 app = Flask(__name__)
 
 class ConnectionDoctor (threading.Thread):
