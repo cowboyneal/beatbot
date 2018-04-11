@@ -4,6 +4,7 @@ PLACEHOLDER_IMAGE    = 'notfound.jpg'
 MPD_ADDRESS          = 'localhost'
 MPD_PORT             = 6600
 STREAM_URL           = 'https://beatbot.cowboyneal.org:8443/stream'
+PUBLIC_STREAM_URL    = 'http://beatbot.cowboyneal.org:8000/stream'
 IMAGE_THUMB_SIZE     = 250
 IMAGE_THUMB_SIZE_SM  = 125
 MOBILE_THUMB_SIZE    = 150
