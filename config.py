@@ -1,4 +1,4 @@
-SONG_FILE_DIRECTORY  = '/home/cowboyneal/mpd'
+SONG_FILE_DIRECTORY  = '/home/pater/mpd'
 BACKGROUND_IMAGE     = 'background.jpg'
 PLACEHOLDER_IMAGE    = 'notfound.jpg'
 MPD_ADDRESS          = 'localhost'
