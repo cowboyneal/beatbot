@@ -33,7 +33,7 @@ function volumeUp() {
 }
 
 function volumeMute() {
-    if (!audio,muted) {
+    if (!audio.muted) {
         audio.muted = true;
         $('#mute-button').html('<i class="fas fa-volume-off"></i>');
     } else {
