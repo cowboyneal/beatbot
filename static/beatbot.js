@@ -1,7 +1,7 @@
 var elapsed = 0, duration = 0;
 var currentSongId, currentOnDeckId;
 
-var isPlaying = false, volume = 100, oldVolume, isMuted = false;
+var isPlaying = false, volume = 100;
 var sourceUrl = $('source').attr('src');
 var audio = document.querySelector('audio');
 
@@ -10,9 +10,9 @@ function volumeDown() {
         return;
     }
 
-    oldVolume = volume;
     volume -= 5;
     audio.volume = volume/100;
+    audio.muted = false;
 
     if (volume == 0) {
         $('#mute-button').html('<i class="fas fa-volume-off"></i>');
@@ -26,25 +26,19 @@ function volumeUp() {
         return;
     }
 
-    oldVolume = volume;
     volume += 5;
     audio.volume = volume/100;
+    audio.muted = false;
     $('#mute-button').text(volume);
-    isMuted = false;
 }
 
 function volumeMute() {
-    if (!isMuted) {
-        oldVolume = volume;
-        volume = 0;
-        audio.volume = 0.0;
+    if (!audio,muted) {
+        audio,muted = true;
         $('#mute-button').html('<i class="fas fa-volume-off"></i>');
-        isMuted = true;
     } else {
-        volume = oldVolume;
-        audio.volume = volume/100;
+        audio,muted = false;
         $('#mute-button').text(volume);
-        isMuted = false;
     }
 }
 
