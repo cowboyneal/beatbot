@@ -282,7 +282,9 @@ $(function () {
         }
     };
     source.onerror = function(event) {
-        $('#disco-alert').show();
+        if (event.target.readyState == EventSource.CLOSED) {
+            $('#disco-alert').show();
+        }
     };
 
     fullRefresh();
