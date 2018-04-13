@@ -16,7 +16,7 @@ class ConnectionDoctor (threading.Thread):
     def run(self):
         with app.app_context():
             while True:
-                time.sleep(540)
+                time.sleep(240)
                 sse.publish({ 'message': 'pong' })
 
 class PlaylistShuffler (threading.Thread):
