@@ -1,9 +1,43 @@
 var elapsed = 0, duration = 0;
 var currentSongId, currentOnDeckId;
 
-var isPlaying = false, volume = 100;
+var isPlaying = false, volume = parseInt(getCookie('volume')) || 100;
 var sourceUrl = $('source').attr('src');
 var audio = document.querySelector('audio');
+
+function setCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() + 2592000000);
+    var expires = 'expires=' + d.toUTCString();
+    document.cookie = cname + '=' + cvalue + ';' + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + '=';
+    var ca = decodeURIComponent(document.cookie).split(';');
+
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+
+    return '';
+}
+
+function updateVolume() {
+    if (volume == 0 || audio.muted) {
+        $('#mute-button').html('<i class="fas fa-volume-off"></i>');
+    } else {
+        $('#mute-button').text(volume);
+    }
+}
 
 function volumeDown() {
     if (volume == 0) {
@@ -13,12 +47,8 @@ function volumeDown() {
     volume -= 5;
     audio.volume = volume/100;
     audio.muted = false;
-
-    if (volume == 0) {
-        $('#mute-button').html('<i class="fas fa-volume-off"></i>');
-    } else {
-        $('#mute-button').text(volume);
-    }
+    setCookie('volume', volume);
+    updateVolume();
 }
 
 function volumeUp() {
@@ -29,16 +59,17 @@ function volumeUp() {
     volume += 5;
     audio.volume = volume/100;
     audio.muted = false;
-    $('#mute-button').text(volume);
+    setCookie('volume', volume);
+    updateVolume();
 }
 
 function volumeMute() {
     if (!audio.muted) {
         audio.muted = true;
-        $('#mute-button').html('<i class="fas fa-volume-off"></i>');
+        updateVolume();
     } else {
         audio.muted = false;
-        $('#mute-button').text(volume);
+        updateVolume();
     }
 }
 
@@ -245,6 +276,9 @@ function submitRequest() {
 }
 
 $(function () {
+    audio.volume = volume/100;
+    updateVolume();
+
     $('#search-modal').on('shown.bs.modal', function() {
         $('#search-term').focus();
     })
