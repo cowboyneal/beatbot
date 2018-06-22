@@ -5,7 +5,7 @@
         <link>http://beatbot.cowboyneal.org/</link>
         <description>Throwback Hip-Hop</description>
             <item>
-                <title>{{ title }} - {{ artist }}</title>
+                <title>{{ title|e }} - {{ artist|e }}</title>
             </item>
     </channel>
 </rss>
