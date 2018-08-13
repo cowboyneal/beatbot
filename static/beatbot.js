@@ -195,7 +195,7 @@ function fullRefresh() {
                     json.currentsong.id);
                 currentSongId = json.currentsong.id;
 
-                if (isMobile) {
+                if (!isMobile) {
                     spawnNotification(json.currentsong.id,
                         json.currentsong.title,
                         json.currentsong.artist,
@@ -297,7 +297,7 @@ $(function () {
     audio.volume = volume/100;
     updateVolume();
 
-    if (isMobile) {
+    if (!isMobile) {
         Notification.requestPermission();
     }
 
