@@ -169,6 +169,15 @@ function setYear(songDate) {
     }
 }
 
+function spawnNotification(id, title, artist, album) {
+    var options = {
+        body: artist + ' - ' + album,
+        icon: 'album_art/' + id
+    };
+
+    var n = new Notification(title, options);
+}
+
 function fullRefresh() {
     $.ajax({
         url: 'now_playing',
@@ -183,6 +192,11 @@ function fullRefresh() {
                 $('#np-thumb').attr('src', 'album_art/' +
                     json.currentsong.id);
                 currentSongId = json.currentsong.id;
+
+                spawnNotification(json.currentsong.id,
+                    json.currentsong.title,
+                    json.currentsong.artist,
+                    json.currentsong.album);
             }
 
             $('#np-name').text(json.currentsong.title);
@@ -278,6 +292,8 @@ function submitRequest() {
 $(function () {
     audio.volume = volume/100;
     updateVolume();
+
+    Notification.requestPermission();
 
     $('#search-modal').on('shown.bs.modal', function() {
         $('#search-term').focus();
