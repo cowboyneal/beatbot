@@ -173,7 +173,8 @@ function spawnNotification(id, title, artist, album) {
     var options = {
         body: artist + ' - ' + album,
         icon: 'album_art/' + id,
-        tag: 'beatbot'
+        tag: 'beatbot',
+        renotify: true
     };
 
     var n = new Notification(title, options);
