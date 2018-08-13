@@ -172,7 +172,8 @@ function setYear(songDate) {
 function spawnNotification(id, title, artist, album) {
     var options = {
         body: artist + ' - ' + album,
-        icon: 'album_art/' + id
+        icon: 'album_art/' + id,
+        tag: 'beatbot'
     };
 
     var n = new Notification(title, options);
