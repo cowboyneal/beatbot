@@ -195,10 +195,12 @@ function fullRefresh() {
                     json.currentsong.id);
                 currentSongId = json.currentsong.id;
 
-                spawnNotification(json.currentsong.id,
-                    json.currentsong.title,
-                    json.currentsong.artist,
-                    json.currentsong.album);
+                if (isMobile) {
+                    spawnNotification(json.currentsong.id,
+                        json.currentsong.title,
+                        json.currentsong.artist,
+                        json.currentsong.album);
+                }
             }
 
             $('#np-name').text(json.currentsong.title);
@@ -295,7 +297,9 @@ $(function () {
     audio.volume = volume/100;
     updateVolume();
 
-    Notification.requestPermission();
+    if (isMobile) {
+        Notification.requestPermission();
+    }
 
     $('#search-modal').on('shown.bs.modal', function() {
         $('#search-term').focus();

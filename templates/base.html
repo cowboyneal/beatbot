@@ -86,6 +86,7 @@
     </script>
     <script>
       var statusUrl = "{{ url_for('sse.stream') }}";
+      var isMobile = ('{{ request.MOBILE }}' == 'True') ? true : false;
     </script>
     <audio>
       <source src="{{ stream_url }}">
