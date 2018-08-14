@@ -195,7 +195,7 @@ function fullRefresh() {
                     json.currentsong.id);
                 currentSongId = json.currentsong.id;
 
-                if (!isMobile) {
+                if (!isMobile && isPlaying) {
                     spawnNotification(json.currentsong.id,
                         json.currentsong.title,
                         json.currentsong.artist,
