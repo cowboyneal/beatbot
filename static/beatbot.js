@@ -303,7 +303,7 @@ $(function () {
     Notification.requestPermission();
 
     if (isMobile) {
-        navigator.serviceWorker.register('beatbot.js');
+        // navigator.serviceWorker.register('beatbot.js');
     }
 
     $('#search-modal').on('shown.bs.modal', function() {
