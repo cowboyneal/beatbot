@@ -302,10 +302,6 @@ $(function () {
     updateVolume();
     Notification.requestPermission();
 
-    if (isMobile) {
-        // navigator.serviceWorker.register('beatbot.js');
-    }
-
     $('#search-modal').on('shown.bs.modal', function() {
         $('#search-term').focus();
     })
