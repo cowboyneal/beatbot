@@ -177,7 +177,13 @@ function spawnNotification(id, title, artist, album) {
         renotify: true
     };
 
-    var n = new Notification(title, options);
+    if (isMobile) {
+        navigator.serviceWorker.ready.then(function(registration) {
+            registration.showNotification(title, options);
+        });
+    } else {
+        var n = new Notification(title, options);
+    }
 }
 
 function fullRefresh() {
@@ -195,12 +201,10 @@ function fullRefresh() {
                     json.currentsong.id);
                 currentSongId = json.currentsong.id;
 
-                if (!isMobile) {
-                    spawnNotification(json.currentsong.id,
-                        json.currentsong.title,
-                        json.currentsong.artist,
-                        json.currentsong.album);
-                }
+                spawnNotification(json.currentsong.id,
+                    json.currentsong.title,
+                    json.currentsong.artist,
+                    json.currentsong.album);
             }
 
             $('#np-name').text(json.currentsong.title);
@@ -296,9 +300,10 @@ function submitRequest() {
 $(function () {
     audio.volume = volume/100;
     updateVolume();
+    Notification.requestPermission();
 
-    if (!isMobile) {
-        Notification.requestPermission();
+    if (isMobile) {
+        navigator.serviceWorker.register('beatbot.js');
     }
 
     $('#search-modal').on('shown.bs.modal', function() {
