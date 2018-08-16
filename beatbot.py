@@ -12,7 +12,7 @@ from musicpd import MPDClient
 from mutagen import File
 from PIL import Image
 from functools import wraps, update_wrapper
-from datetime import datetime
+from datetime import datetime, timedelta
 app = Flask(__name__)
 Mobility(app)
 app.config.from_object('config')
