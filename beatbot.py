@@ -22,7 +22,8 @@ def nocache(view):
     @wraps(view)
     def no_cache(*args, **kwargs):
         response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Last-Modified'] = \
+                datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
         response.headers['Cache-Control'] = 'no-store, no-cache, ' + \
                 'must-revalidate, max-age=0'
         response.headers['Pragma'] = 'no-cache'
@@ -35,8 +36,12 @@ def short_cache(view):
     @wraps(view)
     def short_cache(*args, **kwargs):
         response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Last-Modified'] = \
+                datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
         response.headers['Cache-Control'] = 'must-revalidate, max-age=60'
+        expires = datetime.now() + datetime.timedelta(minutes=1)
+        response.headers['Expires'] = \
+                expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
         return response
 
     return update_wrapper(short_cache, view)
