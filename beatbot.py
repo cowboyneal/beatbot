@@ -3,8 +3,8 @@ import io
 import imghdr
 import time
 
-from flask import Flask, render_template, jsonify, send_file, make_response, \
-        send_from_directory, request
+from flask import Flask, render_template, jsonify, send_file, \
+        make_response, send_from_directory, request
 from flask_sse import sse
 from flask_mobility import Mobility
 from flask_mobility.decorators import mobile_template
@@ -23,8 +23,8 @@ def nocache(view):
     def no_cache(*args, **kwargs):
         response = make_response(view(*args, **kwargs))
         response.headers['Last-Modified'] = datetime.now()
-        response.headers['Cache-Control'] = 'no-store, no-cache, ' +
-            'must-revalidate, max-age=0'
+        response.headers['Cache-Control'] = 'no-store, no-cache, ' + \
+                'must-revalidate, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
         return response
@@ -254,7 +254,8 @@ def get_plinfo(client):
         list_start = 0
 
     list_end = min(list_start + list_length, list_max)
-    playlistinfo = client.playlistinfo(str(list_start) + ':' + str(list_end))
+    playlistinfo = client.playlistinfo(str(list_start) + ':' + \
+            str(list_end))
     n = len(playlistinfo)
 
     if (n < list_length):
