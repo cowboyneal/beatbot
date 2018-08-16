@@ -39,7 +39,7 @@ def short_cache(view):
         response.headers['Last-Modified'] = \
                 datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
         response.headers['Cache-Control'] = 'must-revalidate, max-age=60'
-        expires = datetime.now() + datetime.timedelta(minutes=1)
+        expires = datetime.now() + timedelta(minutes=1)
         response.headers['Expires'] = \
                 expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
         return response
