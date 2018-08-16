@@ -23,12 +23,23 @@ def nocache(view):
     def no_cache(*args, **kwargs):
         response = make_response(view(*args, **kwargs))
         response.headers['Last-Modified'] = datetime.now()
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Cache-Control'] = 'no-store, no-cache, ' +
+            'must-revalidate, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
         return response
 
     return update_wrapper(no_cache, view)
+
+def short_cache(view):
+    @wraps(view)
+    def short_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'must-revalidate, max-age=60'
+        return response
+
+    return update_wrapper(short_cache, view)
 
 @app.route('/')
 @mobile_template('index{_mobile}.html')
@@ -101,7 +112,7 @@ def refresh_playlistinfo():
 
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:is_small>/<int:song_id>')
-@nocache
+@short_cache
 def album_art(song_id, is_small = 0):
     if request.MOBILE:
         if is_small:
