@@ -18,7 +18,7 @@ Mobility(app)
 app.config.from_object('config')
 app.register_blueprint(sse, url_prefix='/status')
 
-def cache_time(timeout=0):
+def cache_time(timeout=None):
     def cache_decorator(view):
         @wraps(view)
         def set_cache(*args, **kwargs):
@@ -27,14 +27,15 @@ def cache_time(timeout=0):
             response.headers['Last-Modified'] = \
                      datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
 
-            if timeout == 0:
+            if timeout is None:
                 cache_control = 'no-store, no-cache, ' + \
                         cache_control + '0'
                 response.headers['Pragma'] = 'no-cache'
                 response.headers['Expires'] = '-1'
             else:
-                cache_control = cache_control + str(timeout * 60)
-                expires = datetime.now() + timedelta(minutes=timeout)
+                cache_control = cache_control + \
+                        str(timeout.total_seconds())
+                expires = datetime.now() + timeout
                 response.headers['Expires'] = \
                         expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
@@ -110,7 +111,7 @@ def refresh_playlistinfo():
 
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:is_small>/<int:song_id>')
-@cache_time(1)
+@cache_time(timedelta(minutes=1))
 def album_art(song_id, is_small=0):
     if request.MOBILE:
         if is_small:
