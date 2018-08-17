@@ -23,10 +23,10 @@ def cache_time(timeout=0):
         @wraps(view)
         def set_cache(*args, **kwargs):
             cache_control = 'must-revalidate, max-age='
-
             response = make_response(view(*args, **kwargs))
             response.headers['Last-Modified'] = \
                      datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
+
             if timeout == 0:
                 cache_control = 'no-store, no-cache, ' + \
                         cache_control + '0'
@@ -39,7 +39,6 @@ def cache_time(timeout=0):
                         expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
             response.headers['Cache-Control'] = cache_control
-
             return response
         return update_wrapper(set_cache, view)
     return cache_decorator
@@ -50,7 +49,6 @@ def beatbot(template):
     client = get_client()
     stats = client.stats()
     close_client(client)
-
     return render_template(template,
             stats=stats,
             background=app.config['BACKGROUND_IMAGE'],
@@ -62,7 +60,6 @@ def rss():
     client = get_client()
     current_song = client.currentsong()
     close_client(client)
-
     return render_template('nowplaying.rss',
             title=current_song['title'],
             artist=current_song['artist'])
@@ -74,7 +71,6 @@ def acme_challenge(file_name):
 @app.route('/now_playing')
 def now_playing():
     client = get_client()
-
     current_song = client.currentsong()
 
     keys = [
@@ -98,7 +94,6 @@ def now_playing():
     }
 
     close_client(client)
-
     return jsonify(data)
 
 @app.route('/playlistinfo')
@@ -116,7 +111,7 @@ def refresh_playlistinfo():
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:is_small>/<int:song_id>')
 @cache_time(1)
-def album_art(song_id, is_small = 0):
+def album_art(song_id, is_small=0):
     if request.MOBILE:
         if is_small:
             size = app.config['MOBILE_THUMB_SIZE_SM']
@@ -155,7 +150,6 @@ def album_art(song_id, is_small = 0):
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
     image_data.seek(0)
-
     return send_file(image_data, attachment_filename=str(song_id) +
         '.' + image_type, mimetype='image/' + image_type)
 
@@ -197,7 +191,6 @@ def search(match):
     results = [item for item in results if item not in neg_results]
     results = sorted(results, key=lambda k: k['title'])
     data = { 'results': clean_playlist(results) }
-
     return jsonify(data)
 
 @app.route('/queue_request/<int:song_id>')
@@ -221,7 +214,6 @@ def queue_request(song_id):
 def get_client():
     client = MPDClient()
     client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
-
     return client
 
 def close_client(client):
@@ -253,15 +245,15 @@ def get_plinfo(client):
     list_length = app.config['COMING_UP_LENGTH'] + 1
     list_max = int(status['playlistlength'])
 
-    if (list_start == list_max):
+    if list_start == list_max:
         list_start = 0
 
     list_end = min(list_start + list_length, list_max)
-    playlistinfo = client.playlistinfo(str(list_start) + ':' + \
+    playlistinfo = client.playlistinfo(str(list_start) + ':' +
             str(list_end))
     n = len(playlistinfo)
 
-    if (n < list_length):
+    if n < list_length:
         playlistinfo += client.playlistinfo('0:' + str(list_length - n))
 
     return clean_playlist(playlistinfo)
@@ -305,7 +297,6 @@ def get_placeholder_image():
         'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
     image = image_file.read()
     image_file.close()
-
     return image
 
 def get_image_type(image):
