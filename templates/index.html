@@ -205,20 +205,23 @@
                     </p>
                   </div>
                   <div class="col-sm-auto pr-0">
-                    <!-- <div class="input-group"> -->
+                    <div class="input-group">
                       <input id="public-stream-url"
                           type="text" class="form-control" size="40"
                           aria-label="URL to Beatbot Icecast stream"
                           value="{{ public_stream_url }}"
                           readonly>
-                      <!-- <div class="input-group-append">
+                      <div class="input-group-append">
                         <button class="btn btn-outline-primary"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Copy link to clipboard"
                             type="button"
-                            onclick="">
+                            onclick="copyToClipboard()">
                           <i class="far fa-copy"></i>
                         </button>
-                      </div> -->
-                    <!-- </div> -->
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

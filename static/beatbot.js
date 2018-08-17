@@ -93,6 +93,11 @@ function playPause() {
     }
 }
 
+function copyToClipboard() {
+    $('#public-stream-url').select();
+    document.execCommand('copy');
+}
+
 function timeFormat(time) {
     var minutes = Math.trunc(time / 60);
     var seconds = Math.trunc(time % 60);
@@ -300,6 +305,10 @@ $(function () {
     if (!isMobile) {
         Notification.requestPermission();
     }
+
+    $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+    })
 
     $('#search-modal').on('shown.bs.modal', function() {
         $('#search-term').focus();
