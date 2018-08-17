@@ -18,33 +18,31 @@ Mobility(app)
 app.config.from_object('config')
 app.register_blueprint(sse, url_prefix='/status')
 
-def nocache(view):
-    @wraps(view)
-    def no_cache(*args, **kwargs):
-        response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = \
-                datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
-        response.headers['Cache-Control'] = 'no-store, no-cache, ' + \
-                'must-revalidate, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-        return response
+def cache_time(timeout=0):
+    def cache_decorator(view):
+        @wraps(view)
+        def set_cache(*args, **kwargs):
+            cache_control = 'must-revalidate, max-age='
 
-    return update_wrapper(no_cache, view)
+            response = make_response(view(*args, **kwargs))
+            response.headers['Last-Modified'] = \
+                     datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
+            if timeout == 0:
+                cache_control = 'no-store, no-cache, ' + \
+                        cache_control + '0'
+                response.headers['Pragma'] = 'no-cache'
+                response.headers['Expires'] = '-1'
+            else:
+                cache_control = cache_control + (timeout * 60)
+                expires = datetime.now() + timedelta(minutes=timeout)
+                response.headers['Expires'] = \
+                        expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
-def short_cache(view):
-    @wraps(view)
-    def short_cache(*args, **kwargs):
-        response = make_response(view(*args, **kwargs))
-        response.headers['Last-Modified'] = \
-                datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
-        response.headers['Cache-Control'] = 'must-revalidate, max-age=60'
-        expires = datetime.now() + timedelta(minutes=1)
-        response.headers['Expires'] = \
-                expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
-        return response
+            response.headers['Cache-Control'] = cache_control
 
-    return update_wrapper(short_cache, view)
+            return response
+        return update_wrapper(set_cache, view)
+    return cache_decorator
 
 @app.route('/')
 @mobile_template('index{_mobile}.html')
@@ -117,7 +115,7 @@ def refresh_playlistinfo():
 
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:is_small>/<int:song_id>')
-@short_cache
+@cache_time(1)
 def album_art(song_id, is_small = 0):
     if request.MOBILE:
         if is_small:
