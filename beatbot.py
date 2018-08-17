@@ -129,7 +129,7 @@ def album_art(song_id, is_small=0):
     close_client(client)
 
     song_file = File(os.path.join(app.config['SONG_FILE_DIRECTORY'],
-        file_name))
+            file_name))
 
     if (file_name.endswith('mp3') and 'APIC:' in song_file.tags and
             song_file.tags['APIC:'].data):
@@ -152,7 +152,7 @@ def album_art(song_id, is_small=0):
     image.save(image_data, format=image_type)
     image_data.seek(0)
     return send_file(image_data, attachment_filename=str(song_id) +
-        '.' + image_type, mimetype='image/' + image_type)
+            '.' + image_type, mimetype='image/' + image_type)
 
 @app.route('/search/<string:match>')
 def search(match):
@@ -188,7 +188,7 @@ def search(match):
 
     results = [dict(t) for t in set([tuple(d.items()) for d in results])]
     neg_results = [dict(t) for t in set([tuple(d.items())
-        for d in neg_results])]
+            for d in neg_results])]
     results = [item for item in results if item not in neg_results]
     results = sorted(results, key=lambda k: k['title'])
     data = { 'results': clean_playlist(results) }
@@ -295,7 +295,7 @@ def get_clean_status(client):
 
 def get_placeholder_image():
     image_file = open(os.path.join(app.root_path,
-        'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
+            'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
     image = image_file.read()
     image_file.close()
     return image
