@@ -37,7 +37,7 @@ def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
                 response.headers['Expires'] = '-1'
             else:
                 cache_control = cache_control + \
-                        str(timeout.total_seconds())
+                        str(int(timeout.total_seconds()))
                 expires = datetime.now() + timeout
                 response.headers['Expires'] = \
                         expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
