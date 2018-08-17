@@ -25,10 +25,11 @@ def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
     def cache_decorator(view):
         @wraps(view)
         def set_cache(*args, **kwargs):
+            time_format = "%a, %d %b %Y %H:%M:%S GMT"
             cache_control = 'must-revalidate, max-age='
             response = make_response(view(*args, **kwargs))
             response.headers['Last-Modified'] = \
-                     datetime.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
+                    datetime.now().strftime(time_format)
 
             if timeout.total_seconds() == 0:
                 cache_control = 'no-store, no-cache, ' + \
@@ -36,11 +37,10 @@ def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
                 response.headers['Pragma'] = 'no-cache'
                 response.headers['Expires'] = '-1'
             else:
-                cache_control = cache_control + \
-                        str(int(timeout.total_seconds()))
+                cache_control += str(int(timeout.total_seconds()))
                 expires = datetime.now() + timeout
                 response.headers['Expires'] = \
-                        expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
+                        expires.strftime(time_format)
 
             response.headers['Cache-Control'] = cache_control
             return response
