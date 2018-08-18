@@ -96,6 +96,7 @@ function playPause() {
 function copyToClipboard() {
     $('#public-stream-url').select();
     document.execCommand('copy');
+    $('#public-stream-url').blur();
 }
 
 function timeFormat(time) {
