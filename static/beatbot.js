@@ -244,7 +244,7 @@ function searchSongs() {
     $.ajax({
         url: 'search/' + match,
         type: 'GET',
-        dataTyoe: 'json',
+        dataType: 'json',
         success: function(json) {
             if (json.results.length == 0) {
                 $('#search-error').show();
