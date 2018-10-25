@@ -1,5 +1,5 @@
 SONG_FILE_DIRECTORY  = '/home/pater/mpd'
-LOG_DIR              = '/var/log/uwsgi/app'
+LOG_DIR              = '/var/log/beatbot'
 BACKGROUND_IMAGE     = 'background.jpg'
 PLACEHOLDER_IMAGE    = 'notfound.jpg'
 MPD_ADDRESS          = 'localhost'
