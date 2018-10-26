@@ -48,14 +48,14 @@ def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
         return update_wrapper(set_cache, view)
     return cache_decorator
 
-def log_song_request(song):
+def log_to_file(file_name, message):
     fmt_str = '%(asctime)s - %(message)s'
-    file_path = os.path.join(app.config['LOG_DIR'], 'song_request.log')
+    file_path = os.path.join(app.config['LOG_DIR'], file_name + '.log')
 
     logging.basicConfig(filename=file_path, level=logging.INFO,
             format=fmt_str)
 
-    logging.info(request.remote_addr + ': ' + str(song))
+    logging.info(request.remote_addr + ': ' + str(message))
 
 @app.route('/')
 @mobile_template('index{_mobile}.html')
@@ -224,8 +224,9 @@ def queue_request(song_id):
         client.moveid(song_id, next_pos)
 
     song = client.playlistid(song_id)[0]
-    log_song_request(song['title'] + ' - ' + song['artist'])
+    log_to_file('song_request', song['title'] + ' - ' + song['artist'])
 
+    close_client(client)
     return jsonify({ 'success': 1 })
 
 def get_client():
