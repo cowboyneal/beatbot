@@ -45,7 +45,7 @@ function volumeDown() {
     }
 
     volume -= 5;
-    audio.volume = volume/100;
+    audio.volume = volume / 100;
     audio.muted = false;
     setCookie('volume', volume);
     updateVolume();
@@ -57,7 +57,7 @@ function volumeUp() {
     }
 
     volume += 5;
-    audio.volume = volume/100;
+    audio.volume = volume / 100;
     audio.muted = false;
     setCookie('volume', volume);
     updateVolume();
@@ -300,7 +300,7 @@ function submitRequest() {
 }
 
 $(function () {
-    audio.volume = volume/100;
+    audio.volume = volume / 100;
     updateVolume();
 
     if (!isMobile) {
