@@ -133,7 +133,10 @@ def album_art(song_id, is_small=0):
             size = app.config['MOBILE_THUMB_SIZE']
     else:
         if is_small:
-            size = app.config['IMAGE_THUMB_SIZE_SM']
+            if is_small == 1:
+                size = app.config['IMAGE_THUMB_SIZE_SM']
+            else:
+                size = app.config['IMAGE_THUMB_SIZE_TINY']
         else:
             size = app.config['IMAGE_THUMB_SIZE']
 
