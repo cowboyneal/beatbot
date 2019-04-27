@@ -215,7 +215,8 @@ def queue_request(song_id):
     client = get_client()
 
     if (song_id == int(client.currentsong()['id']) or
-            song_id == int(client.status()['nextsongid'])):
+            song_id == int(client.status()['nextsongid']) or
+            song_id > int(client.status()['playlistlength'])):
         return jsonify({ 'success': 0 })
 
     for _ in range(2):
