@@ -231,7 +231,10 @@ def queue_request(song_id):
     log_to_file('song_request', song['title'] + ' - ' + song['artist'])
 
     close_client(client)
-    return jsonify({ 'success': 1 })
+    return jsonify({ 'success': 1,
+                     'id'     : song['id'],
+                     'title'  : song['title'],
+                     'artist' : song['artist'] })
 
 def get_client():
     client = MPDClient()
