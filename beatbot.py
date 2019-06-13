@@ -5,7 +5,7 @@ import time
 import logging
 
 from flask import Flask, render_template, jsonify, send_file, \
-        make_response, send_from_directory, request
+    make_response, send_from_directory, request
 from flask_sse import sse
 from flask_mobility import Mobility
 from flask_mobility.decorators import mobile_template
@@ -19,9 +19,10 @@ Mobility(app)
 app.config.from_object('config')
 app.register_blueprint(sse, url_prefix='/status')
 
+
 def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
     timeout = timedelta(weeks=weeks, days=days, hours=hours,
-            minutes=minutes, seconds=seconds)
+                        minutes=minutes, seconds=seconds)
 
     def cache_decorator(view):
         @wraps(view)
@@ -30,32 +31,34 @@ def cache_time(weeks=0, days=0, hours=0, minutes=0, seconds=0):
             cache_control = 'must-revalidate, max-age='
             response = make_response(view(*args, **kwargs))
             response.headers['Last-Modified'] = \
-                    datetime.now().strftime(time_format)
+                datetime.now().strftime(time_format)
 
             if timeout.total_seconds() == 0:
                 cache_control = 'no-store, no-cache, ' + \
-                        cache_control + '0'
+                    cache_control + '0'
                 response.headers['Pragma'] = 'no-cache'
                 response.headers['Expires'] = '-1'
             else:
                 cache_control += str(int(timeout.total_seconds()))
                 expires = datetime.now() + timeout
                 response.headers['Expires'] = \
-                        expires.strftime(time_format)
+                    expires.strftime(time_format)
 
             response.headers['Cache-Control'] = cache_control
             return response
         return update_wrapper(set_cache, view)
     return cache_decorator
 
+
 def log_to_file(file_name, message):
     fmt_str = '%(asctime)s - %(message)s'
     file_path = os.path.join(app.config['LOG_DIR'], file_name + '.log')
 
     logging.basicConfig(filename=file_path, level=logging.INFO,
-            format=fmt_str)
+                        format=fmt_str)
 
     logging.info(request.remote_addr + ': ' + str(message))
+
 
 @app.route('/')
 @mobile_template('index{_mobile}.html')
@@ -64,10 +67,11 @@ def beatbot(template):
     stats = client.stats()
     close_client(client)
     return render_template(template,
-            stats=stats,
-            background=app.config['BACKGROUND_IMAGE'],
-            stream_url=app.config['STREAM_URL'],
-            public_stream_url=app.config['PUBLIC_STREAM_URL'])
+                           stats=stats,
+                           background=app.config['BACKGROUND_IMAGE'],
+                           stream_url=app.config['STREAM_URL'],
+                           public_stream_url=app.config['PUBLIC_STREAM_URL'])
+
 
 @app.route('/nowplaying.rss')
 def rss():
@@ -75,12 +79,14 @@ def rss():
     current_song = client.currentsong()
     close_client(client)
     return render_template('nowplaying.rss',
-            title=current_song['title'],
-            artist=current_song['artist'])
+                           title=current_song['title'],
+                           artist=current_song['artist'])
+
 
 @app.route('/.well-known/acme-challenge/<string:file_name>')
 def acme_challenge(file_name):
     return send_from_directory('static', file_name)
+
 
 @app.route('/now_playing')
 def now_playing():
@@ -102,13 +108,14 @@ def now_playing():
             del current_song[k]
 
     data = {
-        'currentsong' : current_song,
-        'status'      : get_clean_status(client),
+        'currentsong': current_song,
+        'status': get_clean_status(client),
         'playlistinfo': get_plinfo(client)
     }
 
     close_client(client)
     return jsonify(data)
+
 
 @app.route('/playlistinfo')
 def refresh_playlistinfo():
@@ -116,11 +123,12 @@ def refresh_playlistinfo():
 
     data = {
         'playlistinfo': get_plinfo(client),
-        'status'      : get_clean_status(client)
+        'status': get_clean_status(client)
     }
 
     close_client(client)
     return jsonify(data)
+
 
 @app.route('/album_art/<int:song_id>')
 @app.route('/album_art/<int:is_small>/<int:song_id>')
@@ -145,7 +153,7 @@ def album_art(song_id, is_small=0):
     close_client(client)
 
     song_file = File(os.path.join(app.config['SONG_FILE_DIRECTORY'],
-            file_name))
+                                  file_name))
 
     if (file_name.endswith('mp3') and 'APIC:' in song_file.tags and
             song_file.tags['APIC:'].data):
@@ -168,7 +176,8 @@ def album_art(song_id, is_small=0):
     image.save(image_data, format=image_type)
     image_data.seek(0)
     return send_file(image_data, attachment_filename=str(song_id) +
-            '.' + image_type, mimetype='image/' + image_type)
+                     '.' + image_type, mimetype='image/' + image_type)
+
 
 @app.route('/search/<string:match>')
 def search(match):
@@ -188,7 +197,7 @@ def search(match):
         elif lastword:
             if word.endswith('"'):
                 word = lastword + ' ' + word[:-1]
-                lastword = '';
+                lastword = ''
             else:
                 lastword += ' ' + word
                 continue
@@ -204,11 +213,12 @@ def search(match):
 
     results = [dict(t) for t in set([tuple(d.items()) for d in results])]
     neg_results = [dict(t) for t in set([tuple(d.items())
-            for d in neg_results])]
+                                         for d in neg_results])]
     results = [item for item in results if item not in neg_results]
     results = sorted(results, key=lambda k: k['title'])
-    data = { 'results': clean_playlist(results) }
+    data = {'results': clean_playlist(results)}
     return jsonify(data)
+
 
 @app.route('/queue_request/<int:song_id>')
 def queue_request(song_id):
@@ -217,13 +227,13 @@ def queue_request(song_id):
     if (song_id == int(client.currentsong()['id']) or
             song_id == int(client.status()['nextsongid']) or
             song_id > int(client.status()['playlistlength'])):
-        return jsonify({ 'success': 0 })
+        return jsonify({'success': 0})
 
     for _ in range(2):
         next_pos = int(client.status()['nextsong']) + 1
 
         if next_pos == int(client.status()['playlistlength']):
-            next_pos = 0;
+            next_pos = 0
 
         client.moveid(song_id, next_pos)
 
@@ -231,19 +241,22 @@ def queue_request(song_id):
     log_to_file('song_request', song['title'] + ' - ' + song['artist'])
 
     close_client(client)
-    return jsonify({ 'success': 1,
-                     'id'     : song['id'],
-                     'title'  : song['title'],
-                     'artist' : song['artist'] })
+    return jsonify({'success': 1,
+                    'id': song['id'],
+                    'title': song['title'],
+                    'artist': song['artist']})
+
 
 def get_client():
     client = MPDClient()
     client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
     return client
 
+
 def close_client(client):
     client.close()
     client.disconnect()
+
 
 def clean_playlist(playlistinfo):
     keys = [
@@ -262,6 +275,7 @@ def clean_playlist(playlistinfo):
 
     return playlistinfo
 
+
 def get_plinfo(client):
     current_song = client.currentsong()
     status = client.status()
@@ -275,13 +289,14 @@ def get_plinfo(client):
 
     list_end = min(list_start + list_length, list_max)
     playlistinfo = client.playlistinfo(str(list_start) + ':' +
-            str(list_end))
+                                       str(list_end))
     n = len(playlistinfo)
 
     if n < list_length:
         playlistinfo += client.playlistinfo('0:' + str(list_length - n))
 
     return clean_playlist(playlistinfo)
+
 
 def get_clean_status(client):
     while True:
@@ -317,12 +332,14 @@ def get_clean_status(client):
 
     return status
 
+
 def get_placeholder_image():
     image_file = open(os.path.join(app.root_path,
-            'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
+                                   'static', app.config['PLACEHOLDER_IMAGE']), 'rb')
     image = image_file.read()
     image_file.close()
     return image
+
 
 def get_image_type(image):
     return imghdr.what('', image)
