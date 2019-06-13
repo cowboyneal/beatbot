@@ -10,18 +10,22 @@ from datetime import datetime, timedelta
 sys.path.insert(0, '/var/www/beatbot')
 app = Flask(__name__)
 
+
 class ConnectionDoctor (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
+
     def run(self):
         with app.app_context():
             while True:
                 time.sleep(240)
-                sse.publish({ 'message': 'pong' })
+                sse.publish({'message': 'pong'})
+
 
 class PlaylistShuffler (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
+
     def run(self):
         with app.app_context():
             shuffle_client = MPDClient()
@@ -29,17 +33,18 @@ class PlaylistShuffler (threading.Thread):
             while True:
                 time.sleep(60)
                 shuffle_client.connect(app.config['MPD_ADDRESS'],
-                        app.config['MPD_PORT'])
+                                       app.config['MPD_PORT'])
                 status = shuffle_client.status()
                 if int(status['song']) == (int(status['playlistlength']) - 1):
-                    shuffle_client.shuffle();
+                    shuffle_client.shuffle()
                 shuffle_client.close()
                 shuffle_client.disconnect()
+
 
 with app.app_context():
     app.config.from_object('config')
     app.register_blueprint(sse, url_prefix='/status')
- 
+
     client = MPDClient()
     client.connect(app.config['MPD_ADDRESS'], app.config['MPD_PORT'])
 
@@ -57,9 +62,9 @@ with app.app_context():
             if message[0] == 'playlist':
                 delta = datetime.now() - last_pl_update
                 if delta.total_seconds() > 2:
-                    sse.publish({ 'message': message[0] })
+                    sse.publish({'message': message[0]})
                     last_pl_update = datetime.now()
             else:
-                sse.publish({ 'message': message[0] })
+                sse.publish({'message': message[0]})
         except KeyboardInterrupt:
             os._exit(0)
