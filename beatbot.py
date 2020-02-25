@@ -66,11 +66,22 @@ def beatbot(template):
     client = get_client()
     stats = client.stats()
     close_client(client)
+
+    if request.MOBILE:
+        thumb_size = app.config['MOBILE_THUMB_SIZE']
+        thumb_size_sm = app.config['MOBILE_THUMB_SIZE_SM']
+    else:
+        thumb_size = app.config['IMAGE_THUMB_SIZE']
+        thumb_size_sm = app.config['IMAGE_THUMB_SIZE_SM']
+
+
     return render_template(template,
                            stats=stats,
                            background=app.config['BACKGROUND_IMAGE'],
                            stream_url=app.config['STREAM_URL'],
-                           public_stream_url=app.config['PUBLIC_STREAM_URL'])
+                           public_stream_url=app.config['PUBLIC_STREAM_URL'],
+                           thumb_size=thumb_size,
+                           thumb_size_sm=thumb_size_sm)
 
 
 @app.route('/nowplaying.rss')
