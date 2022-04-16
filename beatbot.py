@@ -7,8 +7,8 @@ import logging
 from flask import Flask, render_template, jsonify, send_file, \
     make_response, send_from_directory, request
 from flask_sse import sse
-from flask.ext.mobility import Mobility
-from flask.ext.mobility.decorators import mobile_template
+from flask_mobility import Mobility
+from flask_mobility.decorators import mobile_template
 from musicpd import MPDClient
 from mutagen import File
 from PIL import Image
