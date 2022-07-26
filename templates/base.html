@@ -10,7 +10,7 @@
         rel="stylesheet"
         integrity="sha384-MtIP/3oPOnaTWtZGXE7C1YfcWSIgL8W+tyWY425Vav0Uten58co0sWnIfridWjr9"
         crossorigin="anonymous">
-    <title>Beatbot</title>
+    <title>{{ site_name }}</title>
     <style>
     body {
         background-image: url("{{ url_for('static', filename=background) }}");
@@ -88,6 +88,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js">
     </script>
     <script>
+      var siteName = "{{ site_name }}";
       var statusUrl = "{{ url_for('sse.stream') }}";
       var isMobile = ('{{ request.MOBILE }}' == 'True') ? true : false;
     </script>
@@ -96,7 +97,7 @@
     </audio>
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand mb-0 h1">
-        <i class="fas fa-music"></i> Beatbot
+        <i class="fas fa-music"></i> {{ site_name }}
       </span>
 {%- block nav_rss %}
 {% endblock %}

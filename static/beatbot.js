@@ -192,7 +192,7 @@ function fullRefresh() {
         type: 'GET',
         dataType: 'json',
         success: function(json) {
-            $(document).prop('title', 'Beatbot: ' +
+            $(document).prop('title', siteName + ': ' +
                 json.currentsong.title + ' - ' +
                 json.currentsong.artist);
 

@@ -75,6 +75,7 @@ def beatbot(template):
         thumb_size_sm = app.config['IMAGE_THUMB_SIZE_SM']
 
     return render_template(template,
+                           site_name=app.config['SITE_NAME'],
                            stats=stats,
                            background=app.config['BACKGROUND_IMAGE'],
                            stream_url=app.config['STREAM_URL'],
@@ -89,6 +90,7 @@ def rss():
     current_song = client.currentsong()
     close_client(client)
     return render_template('nowplaying.rss',
+                           site_name=app.config['SITE_NAME'],
                            title=current_song['title'],
                            artist=current_song['artist'])
 
