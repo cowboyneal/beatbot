@@ -1,4 +1,5 @@
 SITE_NAME             = 'Beatbot'
+SITE_LINK             = 'https://beatbot.cowboyneal.org/'
 SONG_FILE_DIRECTORY   = '/home/pater/mpd'
 LOG_DIR               = '/var/log/beatbot'
 BACKGROUND_IMAGE      = 'background.jpg'

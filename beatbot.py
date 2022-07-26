@@ -91,6 +91,7 @@ def rss():
     close_client(client)
     return render_template('nowplaying.rss',
                            site_name=app.config['SITE_NAME'],
+                           site_link=app.config['SITE_LINK'],
                            title=current_song['title'],
                            artist=current_song['artist'])
 

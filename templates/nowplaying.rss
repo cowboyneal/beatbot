@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>{{ site_name|e }}</title>
-        <link>{{ url_for('beatbot') }}</link>
+        <link>{{ site_link }}</link>
         <description>Throwback Hip-Hop</description>
             <item>
                 <title>{{ title|e }} - {{ artist|e }}</title>
