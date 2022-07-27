@@ -67,9 +67,10 @@ def beatbot(template):
     stats = client.stats()
     close_client(client)
 
-    site_theme = app.config['SITE_THEME']
+    site_theme = ''
 
-    if site_theme != '':
+    if 'SITE_THEME' in app.config:
+        site_theme = app.config['SITE_THEME']
         template = template + '_' + site_theme
 
     template = template + '.html';
