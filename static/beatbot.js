@@ -216,6 +216,7 @@ function fullRefresh() {
             if (!siteTheme) {
                 setYear(json.currentsong.date);
             } else {
+                $('#np-year').text(json.currentsong.date);
             }
 
             elapsed = Math.floor(json.status.elapsed);

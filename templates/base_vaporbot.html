@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cyborg/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-MtIP/3oPOnaTWtZGXE7C1YfcWSIgL8W+tyWY425Vav0Uten58co0sWnIfridWjr9"
+        crossorigin="anonymous">
+    <title>{{ site_name }}</title>
+    <style>
+    body {
+        background-image: url("{{ url_for('static', filename=background) }}");
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+    body, .navbar-default {
+        max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+    }
+    .table thead th {
+        border-bottom: 2px solid #555;
+        border-top: 1px solid #555;
+    }
+    .table.table-sm tr td {
+        border-top: 1px solid #555;
+    }
+    body, html {
+        height: 100%;
+    }
+    .card {
+        border: unset;
+    }
+    .card, nav, .modal-content {
+        background-image: linear-gradient(#282828, #060606);
+    }
+    .btn-primary, .progress-bar {
+        background-image: linear-gradient(var(--primary), #2a2fd6);
+    }
+    .btn-outline-primary {
+        background-image: linear-gradient(var(--gray), #060606);
+        border-color: #2a7fd6;
+    }
+    .progress {
+        background-image: linear-gradient(#060606, #282828);
+    }
+    .text-primary, .btn-outline-primary {
+        color: #2a7fd6 !important;
+    }
+    .badge-primary {
+        background-color: #2a7fd6;
+    }
+    .badge-pill {
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+    }
+    .alert-danger {
+        background-image: linear-gradient(var(--danger), #990000);
+    }
+    #public-stream-url {
+        font-family: 'Liberation Mono',Consolas,Menlo,monospace,Courier;
+        background-image: linear-gradient(var(--gray), #adafae);
+    }
+    </style>
+  </head>
+  <body>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+    </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js">
+    </script>
+    <script>
+      var siteName = "{{ site_name }}";
+      var siteTheme = "{{ site_theme }}";
+      var statusUrl = "{{ url_for('sse.stream') }}";
+      var isMobile = ('{{ request.MOBILE }}' == 'True') ? true : false;
+    </script>
+    <audio>
+      <source src="{{ stream_url }}">
+    </audio>
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand mb-0 h1">
+        <i class="fas fa-music"></i> {{ site_name }}
+      </span>
+{%- block nav_rss %}
+{% endblock %}
+    </nav>
+    <div id="disco-alert" class="container pt-3" style="display:none;">
+      <div class="row">
+        <div class="col">
+          <div class="alert alert-danger" role="alert">
+            <dl class="row mb-0">
+              <dt class="col-1"><a href="." class="alert-link"><i class="fas fa-redo"></i></a></dt>
+              <dd class="col pl-2">
+                Beatbot has lost its connection to the server. Please
+                <a href="." class="alert-link">reload the page</a>
+                to resume normal operations.
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+{%- block content %}
+{% endblock -%}
+{%- block modal %}
+{% endblock -%}
+    <script src="{{ url_for('static', filename='beatbot.js') }}"></script>
+  </body>
+</html>

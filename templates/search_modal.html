@@ -1,4 +1,9 @@
-{% extends 'base.html' %}
+{%- set base = 'base' -%}
+{%- if site_theme -%}
+{%- set base = base + '_' + site_theme -%}
+{%- endif -%}
+{%- set base = base + '.html' -%}
+{% extends base %}
 
 {%- block modal %}
     <!-- Modal -->
