@@ -1,5 +1,6 @@
 SITE_NAME             = 'Beatbot'
 SITE_LINK             = 'https://beatbot.cowboyneal.org/'
+SITE_DESCRIPTION      = 'Throwback Hip-Hop'
 SONG_FILE_DIRECTORY   = '/home/pater/mpd'
 LOG_DIR               = '/var/log/beatbot'
 BACKGROUND_IMAGE      = 'background.jpg'
