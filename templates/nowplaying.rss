@@ -3,7 +3,7 @@
     <channel>
         <title>{{ site_name|e }}</title>
         <link>{{ site_link }}</link>
-        <description>Throwback Hip-Hop</description>
+        <description>{{ site_desc|e }}</description>
             <item>
                 <title>{{ title|e }} - {{ artist|e }}</title>
             </item>
