@@ -61,11 +61,18 @@ def log_to_file(file_name, message):
 
 
 @app.route('/')
-@mobile_template('index{_mobile}.html')
+@mobile_template('index{_mobile}')
 def beatbot(template):
     client = get_client()
     stats = client.stats()
     close_client(client)
+
+    site_theme = app.config.get('SITE_THEME', default='')
+
+    if site_theme != '':
+        template = template + '_' + site_theme
+
+    template = template + '.html';
 
     if request.MOBILE:
         thumb_size = app.config['MOBILE_THUMB_SIZE']
@@ -76,6 +83,7 @@ def beatbot(template):
 
     return render_template(template,
                            site_name=app.config['SITE_NAME'],
+                           site_theme=site_theme,
                            stats=stats,
                            background=app.config['BACKGROUND_IMAGE'],
                            stream_url=app.config['STREAM_URL'],

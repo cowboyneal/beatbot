@@ -212,7 +212,11 @@ function fullRefresh() {
             $('#np-name').text(json.currentsong.title);
             $('#np-artist').text(json.currentsong.artist);
             $('#np-album').text(json.currentsong.album);
-            setYear(json.currentsong.date);
+
+            if (!siteTheme) {
+                setYear(json.currentsong.date);
+            } else {
+            }
 
             elapsed = Math.floor(json.status.elapsed);
             duration = Math.ceil(json.status.duration);
