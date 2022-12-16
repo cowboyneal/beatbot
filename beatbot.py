@@ -198,7 +198,7 @@ def album_art(song_id, is_small=0):
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
     image_data.seek(0)
-    return send_file(image_data, attachment_filename=str(song_id) +
+    return send_file(image_data, download_filename=str(song_id) +
                      '.' + image_type, mimetype='image/' + image_type)
 
 
