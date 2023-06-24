@@ -9,8 +9,7 @@ from flask import Flask, render_template, jsonify, send_file, \
 from flask_sse import sse
 from flask_mobility import Mobility
 from flask_mobility.decorators import mobile_template
-from musicpd import MPDClient
-from mutagen import File
+from mpd import MPDClient
 from PIL import Image
 from functools import wraps, update_wrapper
 from datetime import datetime, timedelta

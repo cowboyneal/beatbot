@@ -5,8 +5,8 @@ import threading
 import time
 from flask import Flask
 from flask_sse import sse
-from musicpd import MPDClient
-from datetime import datetime, timedelta
+from mpd import MPDClient
+from datetime import datetime
 sys.path.insert(0, '/var/www/beatbot')
 app = Flask(__name__)
 
