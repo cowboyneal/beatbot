@@ -179,11 +179,7 @@ def album_art(song_id, is_small=0):
         image_type = get_image_type(image_data)
     else:
         image_data = rimage['binary']
-
-        if rimage['type']:
-            image_type = rimage['type']
-        else:
-            image_type = get_image_type(image_data)
+        image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
     image = image.resize((size, size), Image.ANTIALIAS)
