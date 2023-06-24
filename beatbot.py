@@ -172,26 +172,19 @@ def album_art(song_id, is_small=0):
             size = app.config['IMAGE_THUMB_SIZE']
 
     client = get_client()
-    file_name = client.playlistid(song_id)[0]['file']
+    rimage = client.readpicture(client.playlistid(song_id)[0]['file'])
     close_client(client)
 
-    song_file = File(os.path.join(app.config['SONG_FILE_DIRECTORY'],
-                                  file_name))
-
-    if (file_name.endswith('mp3') and 'APIC:' in song_file.tags and
-            song_file.tags['APIC:'].data):
-        image_data = song_file.tags['APIC:'].data
-    elif (file_name.endswith('flac') and song_file.pictures and
-            song_file.pictures[0].data):
-        image_data = song_file.pictures[0].data
-    else:
-        image_data = get_placeholder_image()
-
-    image_type = get_image_type(image_data)
-
-    if not image_type:
+    if not rimage:
         image_data = get_placeholder_image()
         image_type = get_image_type(image_data)
+    else:
+        image_data = rimage['binary']
+
+        if rimage['type']:
+            image_type = rimage['type']
+        else:
+            image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
     image = image.resize((size, size), Image.ANTIALIAS)
