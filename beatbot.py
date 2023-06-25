@@ -174,11 +174,11 @@ def album_art(song_id, is_small=0):
     rimage = client.readpicture(client.playlistid(song_id)[0]['file'])
     close_client(client)
 
-    if not rimage:
-        image_data = get_placeholder_image()
-        image_type = get_image_type(image_data)
-    else:
+    if rimage:
         image_data = rimage['binary']
+        image_type = rimage['type'].split('/')[1]
+    else:
+        image_data = get_placeholder_image()
         image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
