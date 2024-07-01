@@ -74,7 +74,7 @@ def beatbot(template):
 
     template = template + '.html';
 
-    if request.MOBILE:
+    if g.is_mobile:
         thumb_size = app.config['MOBILE_THUMB_SIZE']
         thumb_size_sm = app.config['MOBILE_THUMB_SIZE_SM']
     else:
@@ -156,7 +156,7 @@ def refresh_playlistinfo():
 @app.route('/album_art/<int:is_small>/<int:song_id>')
 @cache_time(minutes=1)
 def album_art(song_id, is_small=0):
-    if request.MOBILE:
+    if g.is_mobile:
         if is_small:
             size = app.config['MOBILE_THUMB_SIZE_SM']
         else:
