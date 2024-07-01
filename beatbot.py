@@ -5,7 +5,7 @@ import time
 import logging
 
 from flask import Flask, render_template, jsonify, send_file, \
-    make_response, send_from_directory, request
+    make_response, send_from_directory, request, g
 from flask_sse import sse
 from flask_mobility import Mobility
 from flask_mobility.decorators import mobile_template
