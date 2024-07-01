@@ -182,7 +182,7 @@ def album_art(song_id, is_small=0):
         image_type = get_image_type(image_data)
 
     image = Image.open(io.BytesIO(image_data))
-    image = image.resize((size, size), Image.ANTIALIAS)
+    image = image.resize((size, size), Image.LANCZOS)
     image_data = io.BytesIO()
     image.save(image_data, format=image_type)
     image_data.seek(0)
