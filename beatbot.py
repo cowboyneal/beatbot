@@ -357,5 +357,8 @@ def get_image_type(image):
     # return imghdr.what('', image)
     kind = filetype(image)
     ext = kind.extension if kind else None
-    ext = 'jpeg' if ext == 'jpg'
+
+    if ext == 'jpg':
+        ext = 'jpeg'
+
     return ext
