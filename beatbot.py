@@ -1,6 +1,7 @@
 import os
 import io
-import imghdr
+# import imghdr
+import filetype
 import time
 import logging
 
@@ -353,4 +354,8 @@ def get_placeholder_image():
 
 
 def get_image_type(image):
-    return imghdr.what('', image)
+    # return imghdr.what('', image)
+    kind = filetype(image)
+    ext = kind.extension if kind else None
+    ext = 'jpeg' if ext == 'jpg'
+    return ext
