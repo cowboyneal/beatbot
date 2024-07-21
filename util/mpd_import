@@ -2,7 +2,8 @@
 import os
 import sys
 import stat
-import imghdr
+#import imghdr
+import filetype
 from pydub import AudioSegment
 from mutagen import File
 from subprocess import run
@@ -13,8 +14,14 @@ BEATBOT_PLAYLIST = 'beatbot'
 
 
 def get_image_type(image):
-    return imghdr.what('', image)
+    #return imghdr.what('', image)
+    kind = filetype(image)
+    ext = kind.extension if kind else None
 
+    if ext == 'jpg':
+        ext = 'jpeg'
+
+    return ext
 
 file_list = sys.argv[1:]
 
