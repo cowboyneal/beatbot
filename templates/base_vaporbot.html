@@ -95,7 +95,8 @@
     .mobile-header {
         font-size: 24px;
     }
-    #np-name, .bright-text, td {
+    #np-name, #np-album, #on-deck-name, .bright-text, button, th, td,
+    #play-clock-elapsed, #play-clock-duration {
         color: #e0e0e0;
     }
     </style>
@@ -125,7 +126,7 @@
     <audio>
       <source src="{{ stream_url }}">
     </audio>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark bright-text">
       <span class="navbar-brand mb-0 h1">
         <i class="fas fa-music"></i> <span id="sitename">{{ site_name }}</span>
       </span>
