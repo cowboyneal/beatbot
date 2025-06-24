@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/libexec/beatbot-python/bin/python3
 import os
 import sys
 import stat
@@ -11,11 +11,12 @@ from shutil import copy2
 
 BEATBOT_SONG_DIR = '/home/pater/mpd'
 BEATBOT_PLAYLIST = 'beatbot'
+SKIP_TESTS = False;
 
 
 def get_image_type(image):
     #return imghdr.what('', image)
-    kind = filetype(image)
+    kind = filetype.guess(image)
     ext = kind.extension if kind else None
 
     if ext == 'jpg':
@@ -23,58 +24,64 @@ def get_image_type(image):
 
     return ext
 
+if sys.argv[1] == '-s':
+    SKIP_TESTS = True
+    sys.argv.pop()
+
 file_list = sys.argv[1:]
 
 if not file_list:
     print('usage:', os.path.basename(__file__), '<file_list>')
     sys.exit(2)
 
-issues = 0
+if not SKIP_TESTS:
+    issues = 0
 
-for f in file_list:
-    os.chmod(f, stat.S_IREAD | stat.S_IWRITE | stat.S_IRGRP | stat.S_IROTH)
+    for f in file_list:
+        os.chmod(f, stat.S_IREAD | stat.S_IWRITE | stat.S_IRGRP | stat.S_IROTH)
 
-    if f.endswith('mp3'):
-        song = AudioSegment.from_mp3(f)
-    elif f.endswith('flac'):
-        song = AudioSegment.from_flac(f)
-    else:
-        print(f, ': format not supported', sep='')
-        issues += 1
-        continue
+        if f.endswith('mp3'):
+            song = AudioSegment.from_mp3(f)
+        elif f.endswith('flac'):
+            song = AudioSegment.from_flac(f)
+        else:
+            print(f, ': format not supported', sep='')
+            issues += 1
+            continue
 
-    if song.frame_rate != 44100:
-        print(f, ': sample rate is not 44.1 Hz', sep='')
-        issues += 1
-        continue
+        if song.frame_rate != 44100:
+            print(f, ': sample rate is not 44.1 Hz', sep='')
+            issues += 1
+            continue
 
-    song_file = File(f)
+        song_file = File(f)
 
-    if (f.endswith('mp3') and ('APIC:' not in song_file.tags or
-                               not song_file.tags['APIC:'].data)):
-        print(f, ': Bad ID3 album art tag', sep='')
-        issues += 1
-        continue
-    elif (f.endswith('flac') and (not song_file.pictures or
-                                  not song_file.pictures[0].data)):
-        print(f, ': Bad vorbis album art tag', sep='')
-        issues += 1
-        continue
+        if (f.endswith('mp3') and ('APIC:' not in song_file.tags or
+                                   not song_file.tags['APIC:'].data)):
+            print(f, ': Bad ID3 album art tag', sep='')
+            issues += 1
+            continue
+        elif (f.endswith('flac') and (not song_file.pictures or
+                                      not song_file.pictures[0].data)):
+            print(f, ': Bad vorbis album art tag', sep='')
+            issues += 1
+            continue
 
-    image_data = song_file.tags['APIC:'].data
-    image_type = get_image_type(image_data)
+        image_data = song_file.tags['APIC:'].data
+        image_type = get_image_type(image_data)
 
-    if not image_type:
-        print(f, ": Couldn't determine image type", sep='')
-        issues += 1
-        continue
+        if not image_type:
+            print(f, ": Couldn't determine image type", sep='')
+            issues += 1
+            continue
 
-if issues:
-    sys.exit(2)
+    if issues:
+        sys.exit(2)
 
-print()
-print('Sample rates and album art tags passed inspection!')
-print()
+    print()
+    print('Sample rates and album art tags passed inspection!')
+    print()
+
 yes_no = input('Try to add mp3gain tags now? [Y/n]: ')
 if yes_no.lower().startswith('n'):
     sys.exit(0)
