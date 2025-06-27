@@ -183,7 +183,15 @@ function spawnNotification(id, title, artist, album) {
         renotify: true
     };
 
-    var n = new Notification(title, options);
+    // var n = new Notification(title, options);
+
+    Notification.requestPermission().then((result) => {
+        if (result === "granted") {
+            navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification(title, options);
+            });
+        }
+    });
 }
 
 function fullRefresh() {
@@ -311,6 +319,8 @@ $(function () {
     if (!isMobile) {
         Notification.requestPermission();
     }
+
+    navigator.serviceWorker.register("beatbot.js");
 
     $(function () {
           $('[data-toggle="tooltip"]').tooltip()
