@@ -83,7 +83,6 @@ def beatbot(template):
         thumb_size_sm = app.config['IMAGE_THUMB_SIZE_SM']
 
     return render_template(template,
-                           is_mobile=g.is_mobile,
                            site_name=app.config['SITE_NAME'],
                            site_theme=site_theme,
                            stats=stats,

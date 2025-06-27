@@ -122,7 +122,7 @@
       var siteName = "{{ site_name }}";
       var siteTheme = "{{ site_theme }}";
       var statusUrl = "{{ url_for('sse.stream') }}";
-      var isMobile = ('{{ request.MOBILE }}' == 'True') ? true : false;
+      var isMobile = ('{{ g.is_mobile }}' == 'True') ? true : false;
     </script>
     <audio>
       <source src="{{ stream_url }}">
