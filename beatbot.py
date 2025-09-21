@@ -84,6 +84,7 @@ def beatbot(template):
 
     return render_template(template,
                            site_name=app.config['SITE_NAME'],
+                           site_link=app.config['SITE_LINK'],
                            site_theme=site_theme,
                            stats=stats,
                            background=app.config['BACKGROUND_IMAGE'],
